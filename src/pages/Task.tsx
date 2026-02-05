@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { ArrowLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export function TaskPage() {
   const { id } = useParams();

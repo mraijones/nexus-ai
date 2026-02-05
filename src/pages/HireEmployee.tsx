@@ -1,23 +1,22 @@
-import { supabase } from '../lib/supabaseClient';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAuth } from '@/lib/auth';
-import { 
-  ArrowLeft, 
-  MessageSquare, 
-  Palette, 
-  Code2, 
-  TrendingUp,
+import {
+  ArrowLeft,
   Check,
   Clock,
-  Zap,
+  Code2,
+  Loader2,
+  MessageSquare,
+  Palette,
   Star,
-  Loader2
+  TrendingUp,
+  Zap
 } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Employee {
   id: string;

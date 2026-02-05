@@ -1,24 +1,20 @@
-import { supabase } from '../lib/supabaseClient';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/lib/auth';
-import { 
-  ArrowLeft, 
-  Send, 
+import {
+  ArrowLeft,
   Calendar,
-  Loader2,
   Check,
-  MessageSquare,
-  Palette,
-  Code2,
-  TrendingUp
+  Loader2,
+  Send
 } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { supabase } from '../lib/supabaseClient';
 
 interface Employee {
   id: string;
