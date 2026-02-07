@@ -1,14 +1,31 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// Vite client-side env vars (must be prefixed with VITE_)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const SUPABASE_CONFIG_OK = Boolean(supabaseUrl && supabaseAnonKey);
+export const SUPABASE_CONFIG_OK = Boolean(supabaseUrl && supabaseAnonKey)
 
-// IMPORTANT: do NOT crash at import-time if env vars are missing.
-// Export null so the app can still mount and show a useful message.
-export const supabase: SupabaseClient | null = SUPABASE_CONFIG_OK
-  ? createClient(supabaseUrl!, supabaseAnonKey!)
-  : null;
-  
+type GlobalWithSupabase = typeof globalThis & {
+  __supabase?: SupabaseClient | null
+};
+
+const g = globalThis as GlobalWithSupabase
+
+export const supabase: SupabaseClient | null =
+  SUPABASE_CONFIG_OK
+    ? (g.__supabase ??
+        createClient(supabaseUrl!, supabaseAnonKey!, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            storageKey: 'sb-auth-token',
+          },
+        }))
+    : null;
+
+// 🔒 enforce singleton across module re-evaluation
+if (SUPABASE_CONFIG_OK) {
+  g.__supabase = supabase
+}
+
