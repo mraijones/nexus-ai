@@ -20,7 +20,7 @@ interface Employee {
   color: string;
 }
 
-const employees: Employee[] = [
+export const employees: Employee[] = [
   {
     id: 'alex',
     name: 'Alex',

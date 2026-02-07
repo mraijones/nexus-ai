@@ -67,7 +67,7 @@ export function TaskPage() {
     try {
       const resp = await fetch('/api/tasks/manual-run', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-user-id': user.id },
+        headers: { 'Content-Type': 'application/json', 'x-user-id': user?.id || '' },
         body: JSON.stringify({ task_id: task.id }),
       });
       const data = await resp.json();

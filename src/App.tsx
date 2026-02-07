@@ -15,7 +15,7 @@ import { Footer } from './sections/Footer';
 import { AuthPage } from './pages/Auth';
 import { DashboardPage } from './pages/Dashboard';
 import { HireEmployeePage } from './pages/HireEmployee';
-import { CreateTaskPage } from './pages/CreateTask';
+import  CreateTaskPage  from './pages/CreateTask';
 import { CheckoutPage } from './pages/Checkout';
 
 // Marketing/Home page

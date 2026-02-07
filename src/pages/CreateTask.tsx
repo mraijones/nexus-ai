@@ -9,11 +9,10 @@ import {
   Calendar,
   Check,
   Loader2,
-  Send
+  Send,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 import { supabase } from '../lib/supabaseClient';
 
 interface Employee {
@@ -81,14 +80,14 @@ function autoAssignEmployee(template: string, title: string, description: string
   return allEmployees[Math.floor(Math.random() * allEmployees.length)]?.id || '';
 }
 
-const myEmployees: Employee[] = allEmployees.map(e => ({
+const myEmployees: Employee[] = allEmployees.map((e) => ({
   id: e.id,
   name: e.name,
   role: e.role,
   image: e.image,
   icon: e.icon,
   color: e.color,
-}));
+}))
 
 const taskTemplates = [
   { id: 'blog', label: 'Blog Post', description: 'Write an SEO-optimized blog article' },
@@ -99,7 +98,7 @@ const taskTemplates = [
   { id: 'custom', label: 'Custom Task', description: 'Describe your own task' },
 ];
 
-export function CreateTaskPage() {
+export default function CreateTaskPage() { 
   const navigate = useNavigate();
   const { user } = useAuth(); // Ensure user is authenticated
   const [selectedEmployee, setSelectedEmployee] = useState<string>('');
@@ -112,6 +111,7 @@ export function CreateTaskPage() {
   useEffect(() => {
     async function loadProfile() {
       if (!user) return;
+      if (!supabase) return;
       try {
         const { data } = await supabase.from('profiles').select('auto_run_tasks').eq('id', user.id).single();
         if (data && typeof data.auto_run_tasks === 'boolean') {
@@ -125,7 +125,7 @@ export function CreateTaskPage() {
   }, [user]);
 
   // Auto-assign employee when template, title, or description changes (unless user overrides)
-  useEffect(() => {
+    useEffect(() => {
     if (!selectedEmployee) {
       setSelectedEmployee(autoAssignEmployee(selectedTemplate, title, description));
     }
@@ -134,7 +134,7 @@ export function CreateTaskPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!user) {
@@ -163,15 +163,12 @@ export function CreateTaskPage() {
         throw new Error(data?.error || 'Failed to create task');
       }
 
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      toast.success('Task created successfully!');
-    } catch (err: any) {
-      setIsSubmitting(false);
-      toast.error('Error creating task: ' + (err.message || String(err)));
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    } catch (err) {
+      console.error("Createtask failed", err);
     }
-  }
-
+  };
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-nexus-dark flex items-center justify-center p-4">
@@ -412,3 +409,4 @@ export function CreateTaskPage() {
     </div>
   );
 }
+

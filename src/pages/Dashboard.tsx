@@ -11,8 +11,6 @@ import {
   Users,
   ClipboardList,
   Settings,
-  CreditCard,
-  Plus,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -58,7 +56,7 @@ export function DashboardPage() {
   const prevTasksRef = useRef<any[]>([]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     async function loadData(showToasts = false) {
       if (!user) return;
       try {
@@ -125,7 +123,7 @@ export function DashboardPage() {
   }
 
   const currentPlan = PRICING_PLANS.find(p => p.id === user?.subscription_tier) || PRICING_PLANS[0];
-
+  void currentPlan;
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
