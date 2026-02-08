@@ -13,9 +13,8 @@ type GlobalWithSupabase = typeof globalThis & {
 };
 const g = globalThis as GlobalWithSupabase;
 
-export const supabase: SupabaseClient =
-  g.__supabase ??
-  createClient(supabaseUrl, supabaseAnonKey, {
+if (!g.__supabase) {
+  g.__supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
@@ -23,6 +22,7 @@ export const supabase: SupabaseClient =
       storageKey: 'sb-auth-token',
     },
   });
+}
 
-g.__supabase = supabase;
+export const supabase: SupabaseClient = g.__supabase;
 

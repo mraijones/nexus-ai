@@ -37,13 +37,12 @@ export function AuthPage() {
     setFormLoading(true);
     setError('');
 
-    const { error } = await signIn(loginEmail, loginPassword);
-
-    if (error) {
-      setError(error.message);
-      setFormLoading(false);
-    } else {
+    try {
+      await signIn(loginEmail, loginPassword);
       navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+      setFormLoading(false);
     }
   }
 
@@ -52,13 +51,12 @@ export function AuthPage() {
     setFormLoading(true);
     setError('');
 
-  const { error } = await signUp(signupEmail, signupPassword, fullName, company);
-
-    if (error) {
-      setError(error.message);
-      setFormLoading(false);
-    } else {
+    try {
+      await signUp(signupEmail, signupPassword);
       navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Signup failed');
+      setFormLoading(false);
     }
   }
 
