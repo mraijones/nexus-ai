@@ -1,31 +1,28 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-export const SUPABASE_CONFIG_OK = Boolean(supabaseUrl && supabaseAnonKey)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables');
+}
 
 type GlobalWithSupabase = typeof globalThis & {
-  __supabase?: SupabaseClient | null
+  __supabase?: SupabaseClient;
 };
+const g = globalThis as GlobalWithSupabase;
 
-const g = globalThis as GlobalWithSupabase
+export const supabase: SupabaseClient =
+  g.__supabase ??
+  createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storageKey: 'sb-auth-token',
+    },
+  });
 
-export const supabase: SupabaseClient | null =
-  SUPABASE_CONFIG_OK
-    ? (g.__supabase ??
-        createClient(supabaseUrl!, supabaseAnonKey!, {
-          auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true,
-            storageKey: 'sb-auth-token',
-          },
-        }))
-    : null;
-
-// 🔒 enforce singleton across module re-evaluation
-if (SUPABASE_CONFIG_OK) {
-  g.__supabase = supabase
-}
+g.__supabase = supabase;
 

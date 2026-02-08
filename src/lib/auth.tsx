@@ -1,130 +1,140 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { supabase, type User } from './supabase';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import { supabase } from "@/lib/supabaseClient";
+import type { Subscription, User } from "@supabase/supabase-js";
 
-interface AuthContextType {
+type Profile = {
+  id: string;
+  full_name: string | null;
+  subscription_tier: string | null;
+};
+
+type AuthContextValue = {
   user: User | null;
+  profile: Profile | null;
   isLoading: boolean;
-  signUp: (email: string, password: string, fullName: string, company?: string) => Promise<{ error: Error | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  refreshProfile: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
-  refreshUser: () => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+// global singleton subscription holder
+type GlobalWithAuthSub = typeof globalThis & { __supabaseAuthSub?: Subscription };
+const g = globalThis as GlobalWithAuthSub;
+
+function ensureGlobalAuthListener(onUserChange: (user: User | null) => void) {
+  const authListener = supabase?.auth.onAuthStateChange((_event, session) => {
+    onUserChange(session?.user ?? null);
+  });
+
+  if (authListener) {
+    g.__supabaseAuthSub = authListener.data.subscription;
+  }
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// TODO: replace with your real profile fetch
+async function fetchUserProfile(userId: string): Promise<Profile | null> {
+  void userId;
+  return null;
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setIsLoading(false);
-      }
-    });
+  const applyUser = async (nextUser: User | null) => {
+    setUser(nextUser);
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setUser(null);
-        setIsLoading(false);
-      }
-    });
+    if (!nextUser) {
+      setProfile(null);
+      setIsLoading(false);
+      return;
+    }
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  async function fetchUserProfile(userId: string) {
+    setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      if (error && error.code !== 'PGRST116') { // PGRST116 = not found
-        console.error('Error fetching profile:', error);
-        }
-      if (!error) {
-          setUser(data as User);
-        } 
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
+      const p = await fetchUserProfile(nextUser.id);
+      setProfile(p);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
-  async function signUp(email: string, password: string, fullName: string, company?: string) {
-  try {
-    const { error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          company: company,
-        }
-      }
-    });
-
-    if (authError) throw authError;
-    // Refresh user after signup
-    await refreshUser();
-    return { error: null };
-  } catch (error) {
-    return { error: error as Error };
-  }
-}
-
-async function signIn(email: string, password: string) {
-  try {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+  const refreshProfile = async () => {
+    const { data, error } = await (supabase?.auth.getSession() ?? {
+      data: null,
+      error: new Error("Supabase client is not initialized"),
     });
     if (error) throw error;
-    // Refresh user after signin
-    await refreshUser();
-    return { error: null };
-  } catch (error) {
-    return { error: error as Error };
-  }
-}
+    await applyUser(data.session?.user ?? null);
+  };
 
-async function signOut() {
-  try {
-    await supabase.auth.signOut();
-    setUser(null);
-  } catch (error) {
-    console.error('Error signing out:', error);
-  }
-}
+  const signIn = async (email: string, password: string) => {
+    const { error } = await (supabase?.auth.signInWithPassword({ email, password }) ?? { error: new Error("Supabase client is not initialized") });
+    if (error) throw error;
+  };
 
-  
+  const signUp = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) throw error;
+  };
 
-async function refreshUser(): Promise<void> {
-    if (user?.id) {
-      await fetchUserProfile(user.id);
-    }
-  }
-  
+  const signOut = async () => {
+    const { error } = await (supabase?.auth.signOut() ?? { error: new Error("Supabase client is not initialized") });
+    if (error) throw error;
+  };
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading, signUp, signIn, signOut, refreshUser }}>
-      {children}
-    </AuthContext.Provider>
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { data, error } = await (supabase?.auth.getSession() ?? {
+          data: null,
+          error: new Error("Supabase client is not initialized"),
+        });
+        if (error) throw error;
+        if (!cancelled) await applyUser(data.session?.user ?? null);
+      } catch {
+        if (!cancelled) {
+          setUser(null);
+          setProfile(null);
+          setIsLoading(false);
+        }
+      }
+    })();
+
+    ensureGlobalAuthListener((nextUser) => {
+      void applyUser(nextUser);
+    });
+
+    return () => {
+      cancelled = true;
+      // intentionally do not unsubscribe the global listener
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const value = useMemo<AuthContextValue>(
+    () => ({ user, profile, isLoading, refreshProfile, signIn, signUp, signOut }),
+    [user, profile, isLoading]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within <AuthProvider />");
+  return ctx;
 }

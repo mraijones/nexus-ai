@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/lib/auth';
-import { PRICING_PLANS } from '@/lib/stripe';
+import { PRICING_PLANS, type PricingPlan } from '@/lib/stripe';
 import {
   Users,
   ClipboardList,
@@ -35,7 +35,7 @@ interface RecentTask {
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const { user, isLoading } = useAuth();
+  const { user, profile, isLoading } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     totalTasks: 0,
     completedTasks: 0,
@@ -122,8 +122,11 @@ export function DashboardPage() {
     );
   }
 
-  const currentPlan = PRICING_PLANS.find(p => p.id === user?.subscription_tier) || PRICING_PLANS[0];
-  void currentPlan;
+  const currentPlan: PricingPlan =
+    PRICING_PLANS.find((p) => p.id === profile?.subscription_tier) || PRICING_PLANS[0];
+
+  console.log('Current Plan:', currentPlan);
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -159,7 +162,7 @@ export function DashboardPage() {
 
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <div className="text-sm text-white">{user?.full_name ? user.full_name.split(' ')[0] : 'User'}</div>
+                <div className="text-sm text-white">{profile?.full_name || 'User'}</div>
                 <div className="text-xs text-nexus-gray">{user?.email || ''}</div>
               </div>
               <Button variant="ghost" size="sm" onClick={() => navigate('/settings')}>
@@ -174,8 +177,8 @@ export function DashboardPage() {
         {/* Welcome */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
-            Welcome back, {user?.full_name ? user.full_name.split(' ')[0] : 'User'}
-          </h1>
+            Welcome back, {profile?.full_name || 'User'}
+              </h1>
           <p className="text-nexus-gray">
             Manage your AI team and track your tasks
           </p>

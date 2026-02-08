@@ -21,7 +21,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 export function CheckoutPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user } = useAuth();
+    const { user, profile } = useAuth();
   const [isYearly, setIsYearly] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [cardNumber, setCardNumber] = useState('');
@@ -136,7 +136,7 @@ export function CheckoutPage() {
                       <Input
                         id="name"
                         placeholder="John Doe"
-                        defaultValue={user?.full_name ? user.full_name.split(' ')[0] : ''}
+                          defaultValue={profile?.full_name || user?.email?.split('@')[0] || ''}
                         className="bg-white/5 border-white/10 text-white placeholder:text-nexus-gray"
                       />
                     </div>
