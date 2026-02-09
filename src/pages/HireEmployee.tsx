@@ -1,3 +1,153 @@
+  {
+    id: 'maria',
+    name: 'Maria',
+    role: 'Customer Success Manager',
+    description: 'Ensures customer satisfaction, manages onboarding, and handles feedback.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Maria',
+    skills: ['Onboarding', 'Customer Feedback', 'Retention', 'Support', 'CRM'],
+    hourlyRate: 18,
+    rating: 4.8,
+    tasksCompleted: 6800,
+    responseTime: '< 2 min',
+    icon: Star,
+    color: 'from-pink-500 to-purple-500',
+    isAvailable: true,
+  },
+  {
+    id: 'taylor',
+    name: 'Taylor',
+    role: 'Accessibility Specialist',
+    description: 'Reviews products for accessibility and inclusivity.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Taylor',
+    skills: ['Accessibility Audits', 'WCAG', 'Inclusive Design', 'Testing', 'User Experience'],
+    hourlyRate: 19,
+    rating: 4.9,
+    tasksCompleted: 6500,
+    responseTime: '< 1 min',
+    icon: Check,
+    color: 'from-yellow-500 to-blue-500',
+    isAvailable: true,
+  },
+  {
+    id: 'amara',
+    name: 'Amara',
+    role: 'Diversity & Inclusion Officer',
+    description: 'Promotes diversity, equity, and inclusion in the workplace.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Amara',
+    skills: ['DEI Training', 'Policy', 'Mediation', 'Culture Building', 'Workshops'],
+    hourlyRate: 20,
+    rating: 4.9,
+    tasksCompleted: 6000,
+    responseTime: '< 2 min',
+    icon: Loader2,
+    color: 'from-orange-500 to-pink-500',
+    isAvailable: true,
+  },
+  {
+    id: 'ivan',
+    name: 'Ivan',
+    role: 'Cybersecurity Analyst',
+    description: 'Protects systems from threats and ensures data privacy.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Ivan',
+    skills: ['Threat Detection', 'Security Audits', 'Incident Response', 'Encryption', 'Network Security'],
+    hourlyRate: 22,
+    rating: 4.8,
+    tasksCompleted: 7200,
+    responseTime: '< 1 min',
+    icon: Clock,
+    color: 'from-blue-700 to-gray-500',
+    isAvailable: true,
+  },
+  {
+    id: 'priya2',
+    name: 'Priya',
+    role: 'Product Manager',
+    description: 'Oversees product development and aligns teams with business goals.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Priya2',
+    skills: ['Roadmapping', 'User Research', 'Agile', 'Feature Planning', 'Strategy'],
+    hourlyRate: 23,
+    rating: 5.0,
+    tasksCompleted: 8000,
+    responseTime: '< 1 min',
+    icon: TrendingUp,
+    color: 'from-green-500 to-yellow-500',
+    isAvailable: true,
+  },
+  {
+    id: 'jamal2',
+    name: 'Jamal',
+    role: 'Social Media Influencer',
+    description: 'Grows brand presence and engagement on social platforms.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Jamal2',
+    skills: ['Content Creation', 'Engagement', 'Analytics', 'Campaigns', 'Branding'],
+    hourlyRate: 17,
+    rating: 4.7,
+    tasksCompleted: 9000,
+    responseTime: '< 2 min',
+    icon: Zap,
+    color: 'from-red-500 to-yellow-500',
+    isAvailable: true,
+  },
+  {
+    id: 'chen2',
+    name: 'Chen',
+    role: 'Operations Specialist',
+    description: 'Optimizes workflows and manages logistics.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Chen2',
+    skills: ['Process Improvement', 'Logistics', 'Scheduling', 'Reporting', 'Optimization'],
+    hourlyRate: 18,
+    rating: 4.8,
+    tasksCompleted: 6700,
+    responseTime: '< 1 min',
+    icon: Star,
+    color: 'from-teal-500 to-green-500',
+    isAvailable: true,
+  },
+  {
+    id: 'fatima2',
+    name: 'Fatima',
+    role: 'Technical Writer',
+    description: 'Creates clear documentation and user guides.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Fatima2',
+    skills: ['Documentation', 'Tutorials', 'Editing', 'Communication', 'User Guides'],
+    hourlyRate: 19,
+    rating: 4.9,
+    tasksCompleted: 7100,
+    responseTime: '< 2 min',
+    icon: MessageSquare,
+    color: 'from-purple-700 to-pink-500',
+    isAvailable: true,
+  },
+  {
+    id: 'diego',
+    name: 'Diego',
+    role: 'Data Scientist',
+    description: 'Builds predictive models and analyzes complex data.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Diego',
+    skills: ['Machine Learning', 'Data Mining', 'Python', 'Visualization', 'Big Data'],
+    hourlyRate: 24,
+    rating: 5.0,
+    tasksCompleted: 8500,
+    responseTime: '< 1 min',
+    icon: Code2,
+    color: 'from-blue-500 to-indigo-500',
+    isAvailable: true,
+  },
+  {
+    id: 'grace2',
+    name: 'Grace',
+    role: 'Community Manager',
+    description: 'Builds and nurtures online communities.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Grace2',
+    skills: ['Moderation', 'Engagement', 'Event Planning', 'Social Listening', 'Community Building'],
+    hourlyRate: 18,
+    rating: 4.8,
+    tasksCompleted: 7800,
+    responseTime: '< 2 min',
+    icon: Loader2,
+    color: 'from-pink-500 to-green-500',
+    isAvailable: true,
+  },
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -36,63 +186,168 @@ interface Employee {
 
 const employees: Employee[] = [
   {
-    id: 'alex',
-    name: 'Alex',
-    role: 'Copywriter',
-    description: 'AI-powered content creator specializing in compelling copy, blog posts, marketing materials, and brand storytelling.',
-    image: '/alex-copywriter.png',
-    skills: ['Blog Writing', 'Ad Copy', 'Email Campaigns', 'SEO Content', 'Social Media'],
-    hourlyRate: 15,
+    id: 'aisha',
+    name: 'Aisha',
+    role: 'Content Strategist',
+    description: 'AI content strategist specializing in SEO and digital marketing.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Aisha',
+    skills: ['SEO', 'Content Planning', 'Copywriting', 'Blogging', 'Brand Voice'],
+    hourlyRate: 16,
     rating: 4.9,
-    tasksCompleted: 15420,
+    tasksCompleted: 12000,
     responseTime: '< 1 min',
     icon: MessageSquare,
     color: 'from-blue-500 to-cyan-500',
     isAvailable: true,
   },
   {
-    id: 'bob',
-    name: 'Bob',
-    role: 'Designer',
-    description: 'Creative AI designer with expertise in UI/UX, branding, illustrations, and marketing materials.',
-    image: '/bob-designer.png',
-    skills: ['UI/UX Design', 'Brand Identity', 'Illustrations', 'Motion Graphics', 'Prototyping'],
-    hourlyRate: 20,
-    rating: 4.8,
-    tasksCompleted: 8930,
-    responseTime: '< 2 min',
-    icon: Palette,
-    color: 'from-purple-500 to-pink-500',
-    isAvailable: true,
-  },
-  {
-    id: 'charlie',
-    name: 'Charlie',
+    id: 'hiroshi',
+    name: 'Hiroshi',
     role: 'Developer',
-    description: 'Full-stack AI developer proficient in multiple languages and frameworks. Builds robust, scalable applications.',
-    image: '/charlie-developer.png',
-    skills: ['React/Next.js', 'Python', 'API Development', 'Database Design', 'DevOps'],
-    hourlyRate: 25,
+    description: 'Full-stack AI developer with expertise in web and mobile apps.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Hiroshi',
+    skills: ['JavaScript', 'React', 'Node.js', 'Python', 'APIs'],
+    hourlyRate: 24,
     rating: 5.0,
-    tasksCompleted: 12350,
+    tasksCompleted: 11000,
     responseTime: '< 30 sec',
     icon: Code2,
     color: 'from-green-500 to-emerald-500',
     isAvailable: true,
   },
   {
-    id: 'david',
-    name: 'David',
-    role: 'Marketer',
-    description: 'Strategic AI marketer who analyzes trends, optimizes campaigns, and drives growth.',
-    image: '/david-marketer.png',
-    skills: ['Campaign Management', 'Analytics', 'A/B Testing', 'Growth Strategy', 'CRM'],
-    hourlyRate: 18,
+    id: 'priya',
+    name: 'Priya',
+    role: 'Data Analyst',
+    description: 'AI data analyst who uncovers insights and trends for business growth.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Priya',
+    skills: ['Data Analysis', 'Visualization', 'SQL', 'Reporting', 'Statistics'],
+    hourlyRate: 19,
+    rating: 4.8,
+    tasksCompleted: 9500,
+    responseTime: '< 2 min',
+    icon: Star,
+    color: 'from-purple-500 to-pink-500',
+    isAvailable: true,
+  },
+  {
+    id: 'juan',
+    name: 'Juan',
+    role: 'Project Manager',
+    description: 'AI project manager who tracks tasks, deadlines, and team progress.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Juan',
+    skills: ['Task Tracking', 'Scheduling', 'Team Management', 'Agile', 'Scrum'],
+    hourlyRate: 21,
     rating: 4.7,
-    tasksCompleted: 18760,
+    tasksCompleted: 8700,
     responseTime: '< 1 min',
     icon: TrendingUp,
     color: 'from-orange-500 to-red-500',
+    isAvailable: true,
+  },
+  {
+    id: 'fatima',
+    name: 'Fatima',
+    role: 'Designer',
+    description: 'Creative AI designer with expertise in branding and UI/UX.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Fatima',
+    skills: ['UI/UX Design', 'Brand Identity', 'Illustrations', 'Prototyping', 'Motion Graphics'],
+    hourlyRate: 20,
+    rating: 4.8,
+    tasksCompleted: 9000,
+    responseTime: '< 2 min',
+    icon: Palette,
+    color: 'from-pink-500 to-yellow-500',
+    isAvailable: true,
+  },
+  {
+    id: 'chen',
+    name: 'Chen',
+    role: 'QA Tester',
+    description: 'AI QA tester who reviews code, tests features, and reports bugs.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Chen',
+    skills: ['Testing', 'Bug Reports', 'Automation', 'Regression', 'Quality Assurance'],
+    hourlyRate: 18,
+    rating: 4.9,
+    tasksCompleted: 8000,
+    responseTime: '< 1 min',
+    icon: Check,
+    color: 'from-teal-500 to-blue-500',
+    isAvailable: true,
+  },
+  {
+    id: 'grace',
+    name: 'Grace',
+    role: 'HR Assistant',
+    description: 'AI HR assistant who screens resumes, schedules interviews, and manages onboarding.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Grace',
+    skills: ['Screening', 'Scheduling', 'Onboarding', 'Policy', 'HR Support'],
+    hourlyRate: 17,
+    rating: 4.8,
+    tasksCompleted: 7800,
+    responseTime: '< 2 min',
+    icon: Loader2,
+    color: 'from-yellow-500 to-orange-500',
+    isAvailable: true,
+  },
+  {
+    id: 'samir',
+    name: 'Samir',
+    role: 'Finance Assistant',
+    description: 'AI finance assistant who tracks expenses, generates invoices, and manages budgets.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Samir',
+    skills: ['Expenses', 'Invoices', 'Budgets', 'Reports', 'Finance'],
+    hourlyRate: 19,
+    rating: 4.7,
+    tasksCompleted: 7600,
+    responseTime: '< 1 min',
+    icon: Clock,
+    color: 'from-green-700 to-lime-500',
+    isAvailable: true,
+  },
+  {
+    id: 'mei',
+    name: 'Mei',
+    role: 'Legal Assistant',
+    description: 'AI legal assistant who drafts contracts, reviews documents, and ensures compliance.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Mei',
+    skills: ['Contracts', 'Compliance', 'Document Review', 'Legal Research', 'Law'],
+    hourlyRate: 20,
+    rating: 4.9,
+    tasksCompleted: 7400,
+    responseTime: '< 2 min',
+    icon: Star,
+    color: 'from-indigo-500 to-purple-500',
+    isAvailable: true,
+  },
+  {
+    id: 'jamal',
+    name: 'Jamal',
+    role: 'Sales Assistant',
+    description: 'AI sales assistant who generates leads, drafts emails, and manages CRM.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Jamal',
+    skills: ['Lead Gen', 'CRM', 'Outreach', 'Follow-up', 'Sales'],
+    hourlyRate: 18,
+    rating: 4.8,
+    tasksCompleted: 7200,
+    responseTime: '< 1 min',
+    icon: Zap,
+    color: 'from-red-500 to-pink-500',
+    isAvailable: true,
+  },
+  {
+    id: 'sofia',
+    name: 'Sofia',
+    role: 'Translator',
+    description: 'AI translator who translates text between languages and localizes content.',
+    image: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Sofia',
+    skills: ['Translation', 'Localization', 'Proofreading', 'Editing', 'Languages'],
+    hourlyRate: 17,
+    rating: 4.9,
+    tasksCompleted: 7000,
+    responseTime: '< 2 min',
+    icon: Code2,
+    color: 'from-yellow-500 to-green-500',
     isAvailable: true,
   },
 ];
@@ -103,17 +358,25 @@ export function HireEmployeePage() {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [isHiring, setIsHiring] = useState(false);
   const [hiredEmployee, setHiredEmployee] = useState<Employee | null>(null);
+  const [search, setSearch] = useState('');
 
   async function handleHire(employee: Employee) {
     setIsHiring(true);
-    
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
     setHiredEmployee(employee);
     setIsHiring(false);
     setSelectedEmployee(null);
   }
+
+  const filteredEmployees = employees.filter(e => {
+    const q = search.toLowerCase();
+    return (
+      e.name.toLowerCase().includes(q) ||
+      e.role.toLowerCase().includes(q) ||
+      e.skills.some(skill => skill.toLowerCase().includes(q))
+    );
+  });
 
   return (
     <div className="min-h-screen bg-nexus-dark">
@@ -146,11 +409,21 @@ export function HireEmployeePage() {
           </p>
         </div>
 
+        {/* Search bar */}
+        <div className="flex justify-center mb-8">
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search by name, role, or skill..."
+            className="w-full max-w-md px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-white placeholder:text-nexus-gray focus:outline-none focus:ring-2 focus:ring-nexus-cyan"
+          />
+        </div>
+
         {/* Employee cards */}
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {employees.map((employee) => {
+          {filteredEmployees.map((employee) => {
             const Icon = employee.icon;
-            
             return (
               <Card 
                 key={employee.id} 
