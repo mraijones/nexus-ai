@@ -162,7 +162,7 @@ export function DashboardPage() {
 
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <div className="text-sm text-white">{profile?.full_name || 'User'}</div>
+                <div className="text-sm text-white">{profile?.full_name ? profile.full_name.split(' ')[0] : user?.email?.split('@')[0] || 'User'}</div>
                 <div className="text-xs text-nexus-gray">{user?.email || ''}</div>
               </div>
               <Button variant="ghost" size="sm" onClick={() => navigate('/settings')}>
@@ -177,7 +177,7 @@ export function DashboardPage() {
         {/* Welcome */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
-            Welcome back, {profile?.full_name || 'User'}
+            Welcome back, {profile?.full_name ? profile.full_name.split(' ')[0] : user?.email?.split('@')[0] || 'User'}
               </h1>
           <p className="text-nexus-gray">
             Manage your AI team and track your tasks
