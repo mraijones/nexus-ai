@@ -62,18 +62,58 @@ export function MyBusinessPage() {
               <div className="text-nexus-gray">No employees hired yet.</div>
             ) : (
               <ul className="space-y-4">
-                {hiredEmployees.map(emp => (
-                  <li key={emp.id} className="flex items-center justify-between bg-nexus-dark rounded p-3">
-                    <div className="flex items-center gap-3">
-                      <img src={emp.image} alt={emp.name} className="w-10 h-10 rounded-full" />
-                      <div>
-                        <div className="text-white font-semibold">{emp.name}</div>
-                        <div className="text-nexus-gray text-sm">{emp.role}</div>
+                {hiredEmployees.map(emp => {
+                  // Calculate hire duration
+                  const hiredAt = emp.hired_at ? new Date(emp.hired_at) : null;
+                  const now = new Date();
+                  const minFireDate = hiredAt ? new Date(hiredAt) : null;
+                  if (minFireDate) minFireDate.setMonth(minFireDate.getMonth() + 1);
+                  const canFire = hiredAt && now >= minFireDate;
+
+                  async function fireEmployee() {
+                    // Cancel all current tasks for this employee
+                    await supabase
+                      .from('tasks')
+                      .update({ status: 'cancelled' })
+                      .eq('employee_id', emp.id)
+                      .eq('user_id', user.id)
+                      .in('status', ['pending', 'in_progress']);
+                    // Remove employee from user's hired list
+                    await supabase
+                      .from('employees')
+                      .delete()
+                      .eq('id', emp.id)
+                      .eq('user_id', user.id);
+                    // Refresh hired employees
+                    setHiredEmployees(hiredEmployees.filter(e => e.id !== emp.id));
+                  }
+
+                  return (
+                    <li key={emp.id} className="flex items-center justify-between bg-nexus-dark rounded p-3">
+                      <div className="flex items-center gap-3">
+                        <img src={emp.image} alt={emp.name} className="w-10 h-10 rounded-full" />
+                        <div>
+                          <div className="text-white font-semibold">{emp.name}</div>
+                          <div className="text-nexus-gray text-sm">{emp.role}</div>
+                          {hiredAt && (
+                            <div className="text-xs text-nexus-gray mt-1">
+                              Hired: {hiredAt.toLocaleDateString()}<br />
+                              {canFire ? '' : 'Cannot fire until ' + minFireDate?.toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <Button variant="destructive" size="sm" onClick={() => {/* TODO: fire employee logic */}}>Fire</Button>
-                  </li>
-                ))}
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        disabled={!canFire}
+                        onClick={fireEmployee}
+                      >
+                        Fire
+                      </Button>
+                    </li>
+                  );
+                })}
               </ul>
             )}
             <Button
