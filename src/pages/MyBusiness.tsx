@@ -1,25 +1,37 @@
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/lib/auth';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabaseClient';
 
 export function MyBusinessPage() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
 
-  // Placeholder for hired employees
-  const hiredEmployees = [];
-  // Placeholder for membership tier
-  const membershipTier = profile?.subscription_tier || 'Free';
-  // Placeholder for employee limit logic
+  const [hiredEmployees, setHiredEmployees] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const membershipTier = profile?.subscription_tier || 'free';
   const employeeLimit = {
-    Free: 1,
-    Tier2: 3,
-    Tier3: 3,
-    Tier4: 4,
-    Tier5: 6,
-    Tier6: 'Unlimited',
+    free: 1,
+    starter: 3,
+    professional: 3,
+    enterprise: 6,
   }[membershipTier] || 1;
+
+  useEffect(() => {
+    if (!user) return;
+    setLoading(true);
+    // Fetch hired employees for this user
+    supabase
+      .from('employees')
+      .select('*')
+      .eq('user_id', user.id)
+      .then(({ data, error }) => {
+        if (!error && data) setHiredEmployees(data);
+        setLoading(false);
+      });
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-nexus-dark px-4 py-8">
@@ -31,8 +43,9 @@ export function MyBusinessPage() {
           <CardContent>
             <div className="mb-4 text-nexus-gray">
               <div><b>Email:</b> {user?.email}</div>
-              <div><b>Membership Tier:</b> {membershipTier}</div>
+              <div><b>Membership Tier:</b> {membershipTier.charAt(0).toUpperCase() + membershipTier.slice(1)}</div>
               <div><b>Employee Limit:</b> {employeeLimit}</div>
+              <div><b>Employees Hired:</b> {hiredEmployees.length}</div>
             </div>
             <Button className="bg-nexus-gradient text-white mb-4" onClick={() => navigate('/membership')}>Upgrade Membership</Button>
           </CardContent>
@@ -43,14 +56,33 @@ export function MyBusinessPage() {
             <CardTitle className="text-white">Hired Employees</CardTitle>
           </CardHeader>
           <CardContent>
-            {hiredEmployees.length === 0 ? (
+            {loading ? (
+              <div className="text-nexus-gray">Loading employees...</div>
+            ) : hiredEmployees.length === 0 ? (
               <div className="text-nexus-gray">No employees hired yet.</div>
             ) : (
               <ul className="space-y-4">
-                {/* Render hired employees here */}
+                {hiredEmployees.map(emp => (
+                  <li key={emp.id} className="flex items-center justify-between bg-nexus-dark rounded p-3">
+                    <div className="flex items-center gap-3">
+                      <img src={emp.image} alt={emp.name} className="w-10 h-10 rounded-full" />
+                      <div>
+                        <div className="text-white font-semibold">{emp.name}</div>
+                        <div className="text-nexus-gray text-sm">{emp.role}</div>
+                      </div>
+                    </div>
+                    <Button variant="destructive" size="sm" onClick={() => {/* TODO: fire employee logic */}}>Fire</Button>
+                  </li>
+                ))}
               </ul>
             )}
-            <Button className="bg-nexus-gradient text-white mt-4" onClick={() => navigate('/directory')}>Hire Employee</Button>
+            <Button
+              className="bg-nexus-gradient text-white mt-4"
+              disabled={hiredEmployees.length >= employeeLimit && employeeLimit !== 'Unlimited'}
+              onClick={() => navigate('/directory')}
+            >
+              Hire Employee
+            </Button>
           </CardContent>
         </Card>
       </div>
