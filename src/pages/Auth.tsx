@@ -52,7 +52,7 @@ export function AuthPage() {
     setError('');
 
     try {
-      await signUp(signupEmail, signupPassword);
+      await signUp(signupEmail, signupPassword, fullName);
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Signup failed');
