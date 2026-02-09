@@ -42,7 +42,7 @@ export function MyBusinessPage() {
           </CardHeader>
           <CardContent>
             <div className="mb-4 text-nexus-gray">
-              <div><b>Email:</b> {user?.email}</div>
+              <div><b>Email:</b> {user ? user.email : 'N/A'}</div>
               <div><b>Membership Tier:</b> {membershipTier.charAt(0).toUpperCase() + membershipTier.slice(1)}</div>
               <div><b>Employee Limit:</b> {employeeLimit}</div>
               <div><b>Employees Hired:</b> {hiredEmployees.length}</div>
@@ -66,11 +66,16 @@ export function MyBusinessPage() {
                   // Calculate hire duration
                   const hiredAt = emp.hired_at ? new Date(emp.hired_at) : null;
                   const now = new Date();
-                  const minFireDate = hiredAt ? new Date(hiredAt) : null;
-                  if (minFireDate) minFireDate.setMonth(minFireDate.getMonth() + 1);
-                  const canFire = hiredAt && now >= minFireDate;
+                  let minFireDate: Date | null = null;
+                  if (hiredAt) {
+                    minFireDate = new Date(hiredAt);
+                    minFireDate.setMonth(minFireDate.getMonth() + 1);
+                  }
+                  // Ensure both are not null before comparing
+                  const canFire = !!(hiredAt && minFireDate && now >= minFireDate);
 
                   async function fireEmployee() {
+                    if (!user) return;
                     // Cancel all current tasks for this employee
                     await supabase
                       .from('tasks')
@@ -98,7 +103,9 @@ export function MyBusinessPage() {
                           {hiredAt && (
                             <div className="text-xs text-nexus-gray mt-1">
                               Hired: {hiredAt.toLocaleDateString()}<br />
-                              {canFire ? '' : 'Cannot fire until ' + minFireDate?.toLocaleDateString()}
+                              {canFire
+                                ? ''
+                                : 'Cannot fire until ' + (minFireDate ? minFireDate.toLocaleDateString() : 'N/A')}
                             </div>
                           )}
                         </div>
@@ -118,7 +125,7 @@ export function MyBusinessPage() {
             )}
             <Button
               className="bg-nexus-gradient text-white mt-4"
-              disabled={hiredEmployees.length >= employeeLimit && employeeLimit !== 'Unlimited'}
+              disabled={hiredEmployees.length >= employeeLimit}
               onClick={() => navigate('/directory')}
             >
               Hire Employee
