@@ -3,7 +3,7 @@
 
 // @ts-nocheck
 import { serve } from 'std/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 const SUPABASE_URL = (globalThis as any).Deno?.env?.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = (globalThis as any).Deno?.env?.get('SUPABASE_SERVICE_ROLE_KEY') || '';
