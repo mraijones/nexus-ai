@@ -1,14 +1,20 @@
-console.log('VITE_SUPABASE_URL:', supabaseUrl);
-console.log('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? '[REDACTED]' : 'MISSING');
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const rawUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseUrl = (rawUrl ?? '').replace(/\s+/g, ''); // removes ALL whitespace anywhere
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
-if (!supabaseUrl?.startsWith('http')) {
-  throw new Error('VITE_SUPABASE_URL is missing or invalid');
+console.log('[ATLAS ENV] rawUrl =', JSON.stringify(rawUrl));
+console.log('[ATLAS ENV] cleanedUrl =', JSON.stringify(supabaseUrl));
+
+try {
+  // strict validation that matches what supabase-js expects
+  new URL(supabaseUrl);
+} catch {
+  throw new Error(`VITE_SUPABASE_URL invalid after cleanup: ${JSON.stringify(supabaseUrl)}`);
 }
+
 if (!supabaseAnonKey) {
   throw new Error('VITE_SUPABASE_ANON_KEY is missing');
 }
