@@ -20,6 +20,7 @@ import { CheckoutPage } from './pages/Checkout';
 
 // Marketing/Home page
 function HomePage() {
+  console.log('[ATLAS DEBUG] HomePage rendered');
   return (
     <>
       <Navigation />
