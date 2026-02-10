@@ -7,6 +7,9 @@ on:
 jobs:
   deploy-functions:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
     steps:
       - uses: actions/checkout@v4
 
@@ -16,9 +19,6 @@ jobs:
           node-version: '20'
 
       - name: Setup Supabase CLI and Deploy
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
         run: |
           npx supabase@latest login --token $SUPABASE_ACCESS_TOKEN
           npx supabase@latest functions deploy process-tasks --project-ref $SUPABASE_PROJECT_REF
