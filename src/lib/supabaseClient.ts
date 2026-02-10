@@ -1,3 +1,5 @@
+console.log('VITE_SUPABASE_URL:', supabaseUrl);
+console.log('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? '[REDACTED]' : 'MISSING');
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
