@@ -1,15 +1,19 @@
 
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
+import { createClient } from '@supabase/supabase-js';
+
+// 1) Read env FIRST
 const rawUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseUrl = (rawUrl ?? '').replace(/\s+/g, ''); // removes ALL whitespace anywhere
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const rawAnon = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
-console.log('[ATLAS ENV] rawUrl =', JSON.stringify(rawUrl));
-console.log('[ATLAS ENV] cleanedUrl =', JSON.stringify(supabaseUrl));
+// 2) Clean/validate SECOND
+const supabaseUrl = (rawUrl ?? '').trim().replace(/\s+/g, '');
+const supabaseAnonKey = (rawAnon ?? '').trim();
+
+console.log('[ENV] rawUrl=', JSON.stringify(rawUrl));
+console.log('[ENV] cleanedUrl=', JSON.stringify(supabaseUrl));
 
 try {
-  // strict validation that matches what supabase-js expects
   new URL(supabaseUrl);
 } catch {
   throw new Error(`VITE_SUPABASE_URL invalid after cleanup: ${JSON.stringify(supabaseUrl)}`);
@@ -19,21 +23,6 @@ if (!supabaseAnonKey) {
   throw new Error('VITE_SUPABASE_ANON_KEY is missing');
 }
 
-type GlobalWithSupabase = typeof globalThis & {
-  __supabase?: SupabaseClient;
-};
-const g = globalThis as GlobalWithSupabase;
-
-if (!g.__supabase) {
-  g.__supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      storageKey: 'sb-auth-token',
-    },
-  });
-}
-
-export const supabase: SupabaseClient = g.__supabase;
+// 3) Create client LAST
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
