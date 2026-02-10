@@ -4,8 +4,11 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+if (!supabaseUrl?.startsWith('http')) {
+  throw new Error('VITE_SUPABASE_URL is missing or invalid');
+}
+if (!supabaseAnonKey) {
+  throw new Error('VITE_SUPABASE_ANON_KEY is missing');
 }
 
 type GlobalWithSupabase = typeof globalThis & {
