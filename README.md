@@ -2,6 +2,14 @@
 
 A React + TypeScript + Vite application with Supabase backend integration.
 
+## 🔍 System Status
+
+Check if the system is operational:
+- **API Health Check**: `/api/health`
+- **Status Page**: `/status`
+
+For more information, see the [Health Check Documentation](./docs/health-check.md).
+
 ## 🚀 Deployment
 
 **⚠️ Deployment Issue:** If you're experiencing deployment failures, see [DEPLOYMENT_TROUBLESHOOTING.md](./DEPLOYMENT_TROUBLESHOOTING.md) for detailed instructions on how to configure the required GitHub Secrets.
