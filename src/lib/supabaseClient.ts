@@ -2,26 +2,29 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// 1) Read env FIRST
-const rawUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const rawAnon = (import.meta.env.VITE_SUPABASE_ANON_KEY ??
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) as string;
+// 1) Read env FIRST (never assume they exist)
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL ?? "").trim();
 
-// 2) Clean/validate SECOND
-const supabaseUrl = (rawUrl ?? '').trim().replace(/\s+/g, '');
-const supabaseAnonKey = (rawAnon ?? '').trim();
+// Prefer the real anon key; allow fallback only if you intentionally support it
+const supabaseAnonKey = (
+  import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+  ""
+).trim();
 
-console.log('[ENV] rawUrl=', JSON.stringify(rawUrl));
-console.log('[ENV] cleanedUrl=', JSON.stringify(supabaseUrl));
+// 2) Validate (fail fast with clear messages)
+if (!supabaseUrl) {
+  throw new Error("VITE_SUPABASE_URL is missing (check .env.local or Vercel env vars)");
+}
+if (!supabaseAnonKey) {
+ throw new Error("VITE_SUPABASE_ANON_KEY (or VITE_SUPABASE_PUBLISHABLE_KEY) is missing (check .env.local or Vercel env vars)");
+}
 
+// Optional: sanity-check URL format (kept minimal)
 try {
   new URL(supabaseUrl);
 } catch {
-  throw new Error(`VITE_SUPABASE_URL invalid after cleanup: ${JSON.stringify(supabaseUrl)}`);
-}
-
-if (!supabaseAnonKey) {
-  throw new Error('VITE_SUPABASE_ANON_KEY (or VITE_SUPABASE_PUBLISHABLE_KEY) is missing');
+  throw new Error(`VITE_SUPABASE_URL is invalid: ${JSON.stringify(supabaseUrl)}`);
 }
 
 // 3) Create client LAST
