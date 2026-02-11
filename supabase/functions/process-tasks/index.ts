@@ -2,7 +2,7 @@
 // Deploy with `supabase functions deploy process-tasks --project-ref <project-ref>`
 
 // @ts-nocheck
-import { serve } from 'std/server';
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 const SUPABASE_URL = (globalThis as any).Deno?.env?.get('SUPABASE_URL') || '';
