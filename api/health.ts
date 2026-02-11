@@ -1,6 +1,22 @@
 import { supabaseAdmin } from '../server/supabase.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+interface DatabaseStatus {
+  connected: boolean;
+  message?: string;
+  error?: string;
+}
+
+interface HealthStatus {
+  status: 'ok' | 'degraded' | 'error';
+  message: string;
+  timestamp: string;
+  service: string;
+  version: string;
+  database?: DatabaseStatus;
+  error?: string;
+}
+
 /**
  * Health check endpoint
  * Returns system status and database connectivity
@@ -12,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const status = {
+    const status: HealthStatus = {
       status: 'ok',
       message: 'Yes, I am here! System is operational.',
       timestamp: new Date().toISOString(),
