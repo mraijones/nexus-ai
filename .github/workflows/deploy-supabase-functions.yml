@@ -1,5 +1,21 @@
 name: Deploy Supabase Functions
 
+# This workflow deploys Supabase Edge Functions to your Supabase project.
+# 
+# REQUIRED SECRETS:
+# - SUPABASE_ACCESS_TOKEN: Your Supabase personal access token
+#   Get it from: https://supabase.com/dashboard/account/tokens
+# 
+# - SUPABASE_PROJECT_REF: Your Supabase project reference ID
+#   Get it from: Project Settings > General Settings > Reference ID
+#
+# To add these secrets:
+# 1. Go to GitHub repository Settings > Secrets and variables > Actions
+# 2. Click "New repository secret"
+# 3. Add both secrets with their respective values
+#
+# For troubleshooting, see: DEPLOYMENT_TROUBLESHOOTING.md
+
 on:
   push:
     branches: [ main ]

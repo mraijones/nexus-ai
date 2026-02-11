@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabaseClient';
 export function MyBusinessPage() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
-
+  if (!user) return null;
   const [hiredEmployees, setHiredEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const membershipTier = profile?.subscription_tier || 'free';

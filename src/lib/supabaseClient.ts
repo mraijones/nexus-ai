@@ -4,7 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // 1) Read env FIRST
 const rawUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const rawAnon = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const rawAnon = (import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) as string;
 
 // 2) Clean/validate SECOND
 const supabaseUrl = (rawUrl ?? '').trim().replace(/\s+/g, '');
@@ -20,7 +21,7 @@ try {
 }
 
 if (!supabaseAnonKey) {
-  throw new Error('VITE_SUPABASE_ANON_KEY is missing');
+  throw new Error('VITE_SUPABASE_ANON_KEY (or VITE_SUPABASE_PUBLISHABLE_KEY) is missing');
 }
 
 // 3) Create client LAST

@@ -1,4 +1,19 @@
-# React + TypeScript + Vite
+# Nexus AI
+
+A React + TypeScript + Vite application with Supabase backend integration.
+
+## 🚀 Deployment
+
+**⚠️ Deployment Issue:** If you're experiencing deployment failures, see [DEPLOYMENT_TROUBLESHOOTING.md](./DEPLOYMENT_TROUBLESHOOTING.md) for detailed instructions on how to configure the required GitHub Secrets.
+
+### Quick Fix for Deployment Issues:
+The deployment requires two GitHub Secrets to be configured:
+- `SUPABASE_ACCESS_TOKEN` - Your Supabase personal access token
+- `SUPABASE_PROJECT_REF` - Your Supabase project reference ID
+
+See the [Deployment Troubleshooting Guide](./DEPLOYMENT_TROUBLESHOOTING.md) for step-by-step instructions.
+
+## 🛠️ Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "display_name": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "source": { "type": "string", "enum": ["ChatGT", "GitHub", "VSCode", "Vercel", "Assistant"] },
+    "intents": { "type": "array", "items": { "type": "string" } },
+    "permissions": { "type": "array", "items": { "type": "string" } },
+    "rate_limits": {
+      "type": "object",
+      "properties": {
+        "requests_per_minute": { "type": "integer" },
+        "concurrent_tasks": { "type": "integer" }
+      },
+      "required": ["requests_per_minute", "concurrent_tasks"]
+    },
+    "compatibility_tag": { "type": "string" },
+    "inputs_schema": { "type": "object" },
+    "outputs_schema": { "type": "object" },
+    "confidence_thresholds": {
+      "type": "object",
+      "properties": {
+        "default": { "type": "number" },
+        "high_risk": { "type": "number" }
+      },
+      "required": ["default", "high_risk"]
+    },
+    "audit_logging": { "type": "boolean" },
+    "created_by": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["id", "display_name", "version", "intents", "permissions", "audit_logging"]
+}
