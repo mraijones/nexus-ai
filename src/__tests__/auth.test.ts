@@ -28,16 +28,16 @@ describe('fetchUserProfile', () => {
 
   it('returns profile data when found', async () => {
     singleMock.mockResolvedValue({
-      data: { id: 'user-1', full_name: 'Test User', subscription_tier: 'starter' },
+      data: { id: 'user-1', full_name: 'Test User', subscription_tier: 'starter', company: 'Acme' },
       error: null,
     });
 
     const profile = await fetchUserProfile('user-1');
 
     expect(fromMock).toHaveBeenCalledWith('profiles');
-    expect(selectMock).toHaveBeenCalledWith('id, full_name, subscription_tier');
+    expect(selectMock).toHaveBeenCalledWith('id, full_name, subscription_tier, company');
     expect(eqMock).toHaveBeenCalledWith('id', 'user-1');
-    expect(profile).toEqual({ id: 'user-1', full_name: 'Test User', subscription_tier: 'starter' });
+    expect(profile).toEqual({ id: 'user-1', full_name: 'Test User', subscription_tier: 'starter', company: 'Acme' });
   });
 
   it('returns null and logs when there is an error', async () => {
