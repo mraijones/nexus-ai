@@ -9,6 +9,7 @@ export function MyBusinessPage() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
   if (!user) return null;
+
   const [hiredEmployees, setHiredEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const membershipTier = profile?.subscription_tier || 'free';
@@ -72,7 +73,11 @@ export function MyBusinessPage() {
                     minFireDate.setMonth(minFireDate.getMonth() + 1);
                   }
                   // Ensure both are not null before comparing
-                  const canFire = !!(hiredAt && minFireDate && now >= minFireDate);
+                  const canFire = (() => {
+                    if (!hiredAt) return false;
+                    if (!minFireDate) return false;
+                    return now >= minFireDate;
+                  })();
 
                   async function fireEmployee() {
                     if (!user) return;
