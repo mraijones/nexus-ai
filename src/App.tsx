@@ -17,6 +17,7 @@ import { DashboardPage } from './pages/Dashboard';
 import { HireEmployeePage } from './pages/HireEmployee';
 import  CreateTaskPage  from './pages/CreateTask';
 import { CheckoutPage } from './pages/Checkout';
+import { StatusPage } from './pages/Status';
 
 // Marketing/Home page
 function HomePage() {
@@ -59,6 +60,7 @@ function App() {
             {/* Public routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/status" element={<StatusPage />} />
             
             {/* Protected app routes */}
             <Route path="/dashboard" element={<DashboardPage />} />
