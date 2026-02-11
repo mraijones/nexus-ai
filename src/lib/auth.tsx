@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (data?.user) {
       const { error: profileError } = await supabase
         .from('profiles')
-        .insert([{ id: data.user.id, full_name: fullName, company: company ?? null }]);
+        .insert([{ id: data.user.id, full_name: fullName, company }]);
       if (profileError) throw profileError;
     }
   };
