@@ -15,7 +15,7 @@ name: Deploy Supabase Functions
 # 3. Add both secrets with their respective values
 #
 # For troubleshooting, see: DEPLOYMENT_TROUBLESHOOTING.md
-
+name: Deploy Supabase Functions
 on:
   push:
     branches: [ main ]
