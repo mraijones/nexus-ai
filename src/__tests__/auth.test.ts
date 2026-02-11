@@ -50,7 +50,7 @@ describe('fetchUserProfile', () => {
     const profile = await fetchUserProfile('user-2');
 
     expect(profile).toBeNull();
-    expect(errorSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith('Error fetching profile', expect.any(Error));
 
     errorSpy.mockRestore();
   });
