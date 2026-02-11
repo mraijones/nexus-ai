@@ -41,10 +41,19 @@ function ensureGlobalAuthListener(onUserChange: (user: User | null) => void) {
   }
 }
 
-// TODO: replace with your real profile fetch
-async function fetchUserProfile(userId: string): Promise<Profile | null> {
-  void userId;
-  return null;
+export async function fetchUserProfile(userId: string): Promise<Profile | null> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, full_name, subscription_tier')
+    .eq('id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching profile', error);
+    return null;
+  }
+
+  return data as Profile | null;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -90,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Insert profile with full_name if sign up succeeded
     if (data?.user) {
       const { error: profileError } = await supabase
-        .from('profile')
+        .from('profiles')
         .insert([{ id: data.user.id, full_name: fullName }]);
       if (profileError) throw profileError;
     }
