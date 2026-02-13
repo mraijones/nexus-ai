@@ -8,14 +8,14 @@ import { roles, tier4Roles } from '@/data/employees';
 export function HomePage() {
   const navigate = useNavigate();
 
-  // Select 2 employees from each tier (1, 2, 3) for featured showcase
+  // Select 2 employees from each tier (1, 2) and 1 from tier 3 for featured showcase
   const tier1Employees = roles.filter(r => r.authorityTier === 1 && r.status === 'available').slice(0, 2);
   const tier2Employees = roles.filter(r => r.authorityTier === 2 && r.status === 'available').slice(0, 2);
-  const tier3Employees = roles.filter(r => r.authorityTier === 3 && r.status === 'available').slice(0, 2);
+  const tier3Employees = roles.filter(r => r.authorityTier === 3 && r.status === 'available').slice(0, 1);
   
   const featuredEmployees = [...tier1Employees, ...tier2Employees, ...tier3Employees];
 
-  // Get all Tier 4 personas with the specific names
+  // Get all Tier 4 personas with the specific names (limit to 7 based on available data)
   const tier4Personas = tier4Roles.flatMap(role => 
     role.personas
       .filter(p => p.persona_name && !p.persona_name.startsWith('TBD'))
@@ -25,7 +25,7 @@ export function HomePage() {
         roleName: role.display_name,
         status: role.status
       }))
-  ).slice(0, 8); // Limit to 8 as per requirements
+  ).slice(0, 7);
 
   // Generate avatar URL for a persona
   const getAvatarUrl = (persona: { persona_name?: string; id: string }) => {
@@ -58,7 +58,7 @@ export function HomePage() {
               <Card key={emp.id} className="bg-nexus-card border-white/5 shadow-xl hover:border-nexus-cyan/30 transition-colors">
                 <CardContent className="flex flex-col items-center p-6">
                   <img 
-                    src={'avatar_url' in persona && persona.avatar_url ? persona.avatar_url : getAvatarUrl(persona)} 
+                    src={('avatar_url' in persona ? persona.avatar_url : undefined) ?? getAvatarUrl(persona)} 
                     alt={persona.persona_name} 
                     className="w-24 h-24 rounded-full mb-4 border-4 border-nexus-cyan object-cover" 
                   />
