@@ -33,6 +33,11 @@ export function HomePage() {
     return `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
   };
 
+  // Get avatar URL with fallback
+  const getPersonaAvatar = (persona: { avatar_url?: string; persona_name?: string; id: string }) => {
+    return ('avatar_url' in persona ? persona.avatar_url : undefined) ?? getAvatarUrl(persona);
+  };
+
   return (
     <div className="min-h-screen bg-nexus-dark flex flex-col items-center px-4 py-8">
       {/* Main Banner */}
@@ -58,7 +63,7 @@ export function HomePage() {
               <Card key={emp.id} className="bg-nexus-card border-white/5 shadow-xl hover:border-nexus-cyan/30 transition-colors">
                 <CardContent className="flex flex-col items-center p-6">
                   <img 
-                    src={('avatar_url' in persona ? persona.avatar_url : undefined) ?? getAvatarUrl(persona)} 
+                    src={getPersonaAvatar(persona)} 
                     alt={persona.persona_name} 
                     className="w-24 h-24 rounded-full mb-4 border-4 border-nexus-cyan object-cover" 
                   />
@@ -102,8 +107,8 @@ export function HomePage() {
       <div className="w-full max-w-7xl mx-auto mb-12">
         <h2 className="text-3xl font-bold text-white text-center mb-8">Strategic Partners (Tier 4)</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {tier4Personas.map((persona, index) => (
-            <Card key={`${persona.id}-${index}`} className="bg-nexus-card border-white/5 shadow-xl hover:border-nexus-pink/30 transition-colors">
+          {tier4Personas.map((persona) => (
+            <Card key={`${persona.roleId}-${persona.id}`} className="bg-nexus-card border-white/5 shadow-xl hover:border-nexus-pink/30 transition-colors">
               <CardContent className="flex flex-col items-center p-6">
                 <img 
                   src={getAvatarUrl(persona)} 
