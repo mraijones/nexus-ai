@@ -24,7 +24,6 @@ const featured = [
   },
   // ...add 8 more featured employees from your employees array...
 ];
-const TOTAL_EMPLOYEES = 15; // Update this to match your real total
 
 
 export function HomePage() {
@@ -36,7 +35,7 @@ export function HomePage() {
       <div className="w-full max-w-3xl mx-auto text-center mb-10">
         <div className="bg-gradient-to-r from-nexus-cyan to-nexus-pink rounded-xl py-5 px-6 shadow-lg mb-6">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-1">
-            {TOTAL_EMPLOYEES}+ AI Employees Available
+            Tier 4 Employees — Coming Soon
           </h2>
           <div className="text-lg font-bold text-white/90">Empower your business with the world’s most diverse AI workforce.</div>
         </div>
