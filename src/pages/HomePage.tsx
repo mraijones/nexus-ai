@@ -8,6 +8,9 @@ import { roles, tier4Roles } from '@/data/employees';
 export function HomePage() {
   const navigate = useNavigate();
 
+  // Calculate total employee count
+  const totalEmployees = roles.length + tier4Roles.length;
+
   // Select 2 employees from each tier (1, 2) and 1 from tier 3 for featured showcase
   const tier1Employees = roles.filter(r => r.authorityTier === 1 && r.status === 'available').slice(0, 2);
   const tier2Employees = roles.filter(r => r.authorityTier === 2 && r.status === 'available').slice(0, 2);
@@ -27,15 +30,11 @@ export function HomePage() {
       }))
   ).slice(0, 7);
 
-  // Generate avatar URL for a persona
-  const getAvatarUrl = (persona: { persona_name?: string; id: string }) => {
+  // Get avatar URL with fallback to generated avatar
+  const getPersonaAvatar = (persona: { avatar_url?: string; persona_name?: string; id: string }) => {
+    if (persona.avatar_url) return persona.avatar_url;
     const seed = persona.persona_name || persona.id;
     return `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
-  };
-
-  // Get avatar URL with fallback
-  const getPersonaAvatar = (persona: { avatar_url?: string; persona_name?: string; id: string }) => {
-    return ('avatar_url' in persona ? persona.avatar_url : undefined) ?? getAvatarUrl(persona);
   };
 
   return (
@@ -44,7 +43,7 @@ export function HomePage() {
       <div className="w-full max-w-5xl mx-auto text-center mb-12">
         <h1 className="text-5xl font-bold text-white mb-4">Welcome to Nexus AI Business Hub</h1>
         <p className="text-xl text-nexus-gray mb-6">
-          Empower your business with 24+ AI employees across all tiers.
+          Empower your business with {totalEmployees}+ AI employees across all tiers.
         </p>
         <p className="text-nexus-gray">
           Manage your business, employees, and membership all in one place.
@@ -111,7 +110,7 @@ export function HomePage() {
             <Card key={`${persona.roleId}-${persona.id}`} className="bg-nexus-card border-white/5 shadow-xl hover:border-nexus-pink/30 transition-colors">
               <CardContent className="flex flex-col items-center p-6">
                 <img 
-                  src={getAvatarUrl(persona)} 
+                  src={getPersonaAvatar(persona)} 
                   alt={persona.persona_name} 
                   className="w-20 h-20 rounded-full mb-3 border-4 border-nexus-pink object-cover" 
                 />
