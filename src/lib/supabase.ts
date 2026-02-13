@@ -1,10 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://rzqfejksfraxkqfxvmnz.supabase.co';
-const supabaseAnonKey = 'sb_publishable_FhaNmb_oDBVxuXXwFMPggQ_kVpkr3z-';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 export type User = {
   id: string;
   email: string;

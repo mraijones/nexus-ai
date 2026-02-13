@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { toast } from 'sonner';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

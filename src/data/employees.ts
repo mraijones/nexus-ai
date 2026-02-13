@@ -473,15 +473,6 @@ export const roles = [
     boundaries: ['Cannot sign documents', 'Cannot provide legal advice'],
     personas: [
       {
-        id: 'kierra',
-        persona_name: 'Kierra',
-        gender: 'female',
-        ethnicity: 'Caucasian',
-        age_range: '30-40',
-        avatar_url: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Kierra&hair=curly&hairColor=brown&skinColor=light',
-        is_active: true,
-      },
-      {
         id: 'marcus',
         persona_name: 'Marcus',
         gender: 'male',
@@ -523,15 +514,6 @@ export const roles = [
     handles: ['Tracks expenses', 'Generates invoices', 'Manages budgets'],
     boundaries: ['Cannot approve payments', 'Cannot modify bank accounts'],
     personas: [
-      {
-        id: 'kahlynn',
-        persona_name: 'Kahlynn',
-        gender: 'female',
-        ethnicity: 'Latina',
-        age_range: '25-35',
-        avatar_url: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Kahlynn&hair=long&hairColor=brown&skinColor=light',
-        is_active: true,
-      },
       {
         id: 'david',
         persona_name: 'David',

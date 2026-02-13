@@ -1,4 +1,3 @@
-import { supabaseAdmin } from '../server/supabase.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 interface DatabaseStatus {
@@ -36,31 +35,48 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       version: '1.0.0',
     };
 
-    // Check database connectivity
-    try {
-      const { error } = await supabaseAdmin
-        .from('ai_employees')
-        .select('count')
-        .limit(1);
+    // Check database connectivity via REST to avoid duplicate client creation
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
 
-      if (error) {
-        status.status = 'degraded';
-        status.database = {
-          connected: false,
-          error: error.message,
-        };
-      } else {
-        status.database = {
-          connected: true,
-          message: 'Database connection successful',
-        };
-      }
-    } catch (dbError) {
+    if (!supabaseUrl || !supabaseKey) {
       status.status = 'degraded';
       status.database = {
         connected: false,
-        error: dbError instanceof Error ? dbError.message : 'Unknown database error',
+        error: 'Supabase environment variables are missing',
       };
+    } else {
+      try {
+        const response = await fetch(
+          `${supabaseUrl}/rest/v1/ai_employees?select=id&limit=1`,
+          {
+            headers: {
+              apikey: supabaseKey,
+              Authorization: `Bearer ${supabaseKey}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          status.status = 'degraded';
+          status.database = {
+            connected: false,
+            error: errorText || `Health check failed with status ${response.status}`,
+          };
+        } else {
+          status.database = {
+            connected: true,
+            message: 'Database connection successful',
+          };
+        }
+      } catch (dbError) {
+        status.status = 'degraded';
+        status.database = {
+          connected: false,
+          error: dbError instanceof Error ? dbError.message : 'Unknown database error',
+        };
+      }
     }
 
     // Return appropriate status code based on health
