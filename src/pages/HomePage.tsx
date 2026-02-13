@@ -28,7 +28,7 @@ export function HomePage() {
   ).slice(0, 8); // Limit to 8 as per requirements
 
   // Generate avatar URL for a persona
-  const getAvatarUrl = (persona: any) => {
+  const getAvatarUrl = (persona: { persona_name?: string; id: string }) => {
     const seed = persona.persona_name || persona.id;
     return `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
   };
