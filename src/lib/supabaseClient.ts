@@ -27,6 +27,8 @@ try {
   throw new Error(`VITE_SUPABASE_URL is invalid: ${JSON.stringify(supabaseUrl)}`);
 }
 
-// 3) Create client LAST
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// 3) Create client LAST (reuse across HMR to avoid duplicate GoTrueClient warnings)
+const globalScope = globalThis as typeof globalThis & { __supabaseClient?: ReturnType<typeof createClient> };
+export const supabase = globalScope.__supabaseClient ?? createClient(supabaseUrl, supabaseAnonKey);
+globalScope.__supabaseClient = supabase;
 
