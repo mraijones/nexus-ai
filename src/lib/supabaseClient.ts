@@ -28,7 +28,7 @@ try {
 }
 
 // 3) Create client LAST (reuse across HMR to avoid duplicate GoTrueClient warnings)
-const globalScope = globalThis as typeof globalThis & { __supabaseClient?: ReturnType<typeof createClient> };
-export const supabase = globalScope.__supabaseClient ?? createClient(supabaseUrl, supabaseAnonKey);
+const globalScope = globalThis as typeof globalThis & { __supabaseClient?: ReturnType<typeof createClient<any>> };
+export const supabase = globalScope.__supabaseClient ?? createClient<any>(supabaseUrl, supabaseAnonKey);
 globalScope.__supabaseClient = supabase;
 

@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Insert profile with full_name if sign up succeeded
     if (data?.user) {
       const { error: profileError } = await supabase
-        .from('profile')
+        .from('profiles')
         .insert([{ id: data.user.id, full_name: fullName }]);
       if (profileError) throw profileError;
     }
