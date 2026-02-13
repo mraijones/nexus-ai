@@ -35,8 +35,6 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
   );
 }
 
-console.log('[ATLAS DEBUG] main.tsx loaded');
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>

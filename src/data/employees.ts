@@ -6,14 +6,6 @@ export const PLATFORM_FEE = Object.freeze({
   description: 'Serious access — signals commitment, not monetization.'
 });
 
-export const ATLAS_PRICING = Object.freeze({
-  label: 'ATLAS',
-  price: 250000,
-  unit: 'year',
-  term: 3,
-  description: 'Immutable decision infrastructure. 3-year term. Non-advisory, hindsight-proof.'
-});
-
 // Tier 4 — Strategic Operator roles (all coming_soon)
 export const tier4Roles = [
   {
@@ -33,7 +25,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -75,7 +67,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -117,7 +109,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -149,7 +141,7 @@ export const tier4Roles = [
       'Does not give advice or recommendations',
       'Does not rank or optimize decisions',
       'All decisions require human confirmation',
-      'Decision reasoning is preserved via ATLAS',
+      'Decision reasoning is preserved via audit logs',
       'Decisions are recorded before outcomes exist',
       'Reasoning is immutable once confirmed',
       'No retroactive edits or scoring',
@@ -163,7 +155,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -197,7 +189,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -231,7 +223,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -265,7 +257,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -299,7 +291,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
@@ -333,7 +325,7 @@ export const tier4Roles = [
       label: 'Enterprise',
       price: null,
       unit: 'custom',
-      description: 'Invite-only. No price listed. Bound to ATLAS. Explicit human confirmation.'
+      description: 'Invite-only. No price listed. Explicit human confirmation required.'
     },
     status: 'coming_soon',
     safeguards: ['Explicit approval thresholds', 'Audit logging', 'Restricted activation'],
