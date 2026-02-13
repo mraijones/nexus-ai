@@ -57,6 +57,40 @@ async function processTask(task: any) {
 
 serve(async (_req) => {
   try {
+    let taskId: string | null = null;
+    try {
+      const body = await _req.json();
+      taskId = body?.task_id || null;
+    } catch {
+      taskId = null;
+    }
+
+    if (taskId) {
+      const { data: task, error: taskError } = await supabaseAdmin
+        .from('tasks')
+        .select('*')
+        .eq('id', taskId)
+        .single();
+
+      if (taskError || !task) {
+        return new Response(JSON.stringify({ error: 'Task not found' }), { status: 404 });
+      }
+
+      const { data: locked, error: lockError } = await supabaseAdmin
+        .from('tasks')
+        .update({ status: 'processing' })
+        .eq('id', task.id)
+        .eq('status', 'pending')
+        .select('id');
+
+      if (lockError || !locked || locked.length === 0) {
+        return new Response(JSON.stringify({ error: 'Task is not pending' }), { status: 409 });
+      }
+
+      const result = await processTask(task);
+      return new Response(JSON.stringify({ processed: 1, results: [result] }), { status: 200 });
+    }
+
     // Fetch pending auto-run tasks
     const { data: tasks } = await supabaseAdmin
       .from('tasks')

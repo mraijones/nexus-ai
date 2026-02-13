@@ -60,9 +60,9 @@ export function DashboardPage() {
     async function loadData(showToasts = false) {
       if (!user) return;
       try {
-        const { data: tasks } = await supabase
+        const { data: tasks, count: totalCount } = await supabase
           .from('tasks')
-          .select('id,title,employee_id,status,created_at')
+          .select('id,title,employee_id,status,created_at', { count: 'exact' })
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(10);
@@ -98,10 +98,31 @@ export function DashboardPage() {
             setRecentTasks((prev) => prev.map((r: any) => ({ ...r, employee_name: map[r.employee_name] || r.employee_name })));
           }
 
+          const monthStart = new Date();
+          monthStart.setDate(1);
+          monthStart.setHours(0, 0, 0, 0);
+
+          const { data: employeeRows } = await supabase
+            .from('tasks')
+            .select('employee_id')
+            .eq('user_id', user.id);
+
+          const { count: tasksThisMonthCount } = await supabase
+            .from('tasks')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', user.id)
+            .gte('created_at', monthStart.toISOString());
+
+          const activeEmployees = new Set(
+            (employeeRows || []).map((row: any) => row.employee_id).filter(Boolean)
+          ).size;
+
           setStats((s) => ({
             ...s,
-            totalTasks: tasks.length,
+            totalTasks: totalCount ?? tasks.length,
             completedTasks: tasks.filter((t: any) => t.status === 'done').length,
+            activeEmployees,
+            tasksThisMonth: tasksThisMonthCount ?? 0,
           }));
         }
       } catch (err) {
@@ -129,10 +150,12 @@ export function DashboardPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'done':
         return <CheckCircle className="w-4 h-4 text-green-400" />;
-      case 'in_progress':
+      case 'processing':
         return <Clock className="w-4 h-4 text-yellow-400" />;
+      case 'failed':
+        return <AlertCircle className="w-4 h-4 text-red-400" />;
       default:
         return <AlertCircle className="w-4 h-4 text-nexus-gray" />;
     }
@@ -140,8 +163,10 @@ export function DashboardPage() {
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
-      completed: 'bg-green-500/20 text-green-400',
-      in_progress: 'bg-yellow-500/20 text-yellow-400',
+      done: 'bg-green-500/20 text-green-400',
+      processing: 'bg-yellow-500/20 text-yellow-400',
+      failed: 'bg-red-500/20 text-red-400',
+      cancelled: 'bg-white/10 text-nexus-gray',
       pending: 'bg-white/10 text-nexus-gray',
     };
     return variants[status] || variants.pending;

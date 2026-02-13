@@ -19,6 +19,10 @@ Environment variables (set in Supabase Dashboard -> Functions -> Environment Var
 Testing
 - You can call the function directly with curl (after deploy):
   curl -X POST https://<project>.functions.supabase.co/process-tasks
+- To run a specific manual task, pass a task id:
+  curl -X POST https://<project>.functions.supabase.co/process-tasks \
+    -H "Content-Type: application/json" \
+    -d '{"task_id":"<task-id>"}'
 
 Notes
 - Scheduling the function as a cron lets Supabase run it in background on a schedule without a long-running process.

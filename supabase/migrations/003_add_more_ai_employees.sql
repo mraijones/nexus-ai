@@ -1,6 +1,6 @@
 insert into ai_employees (id, name, role, description, image, skills, stats, color) values
 ('eve','Eve','Data Analyst','AI data analyst who uncovers insights, visualizes trends, and helps you make data-driven decisions.','/eve-analyst.png',ARRAY['Data Analysis','Visualization','Reporting','SQL','Dashboards'], '{"tasksCompleted":10200,"satisfaction":97,"responseTime":"< 2 min"}', 'from-cyan-500 to-blue-500'),
-on conflict (id) do nothing;
+('sam','Sam','Customer Support','AI support agent who answers questions, resolves issues, and keeps your customers happy 24/7.','/sam-support.png',ARRAY['Support Tickets','Live Chat','FAQ','Troubleshooting','Feedback'], '{"tasksCompleted":15800,"satisfaction":99,"responseTime":"< 1 min"}', 'from-teal-500 to-blue-400'),
 ('sophia','Sophia','SEO Specialist','AI SEO expert who optimizes your content, audits your site, and boosts your search rankings.','/sophia-seo.png',ARRAY['SEO Audit','Keyword Research','Content Optimization','Backlinks','Analytics'], '{"tasksCompleted":8900,"satisfaction":96,"responseTime":"< 2 min"}', 'from-green-400 to-blue-600'),
 ('mia','Mia','Social Media Manager','AI social media manager who schedules posts, engages your audience, and analyzes performance.','/mia-social.png',ARRAY['Scheduling','Engagement','Analytics','Content Creation','Brand Voice'], '{"tasksCompleted":11200,"satisfaction":98,"responseTime":"< 1 min"}', 'from-pink-500 to-yellow-500'),
 ('paul','Paul','Project Manager','AI project manager who tracks tasks, deadlines, and team progress to keep you on schedule.','/paul-pm.png',ARRAY['Task Tracking','Scheduling','Reminders','Team Coordination','Reporting'], '{"tasksCompleted":9700,"satisfaction":97,"responseTime":"< 2 min"}', 'from-yellow-500 to-orange-500'),
@@ -11,6 +11,11 @@ on conflict (id) do nothing;
 ('finley','Finley','Finance Assistant','AI finance assistant who tracks expenses, generates invoices, and summarizes financial data.','/finley-finance.png',ARRAY['Expenses','Invoices','Summaries','Budgeting','Reporting'], '{"tasksCompleted":6100,"satisfaction":98,"responseTime":"< 2 min"}', 'from-green-700 to-blue-900'),
 ('sage','Sage','Researcher','AI researcher who gathers information, summarizes articles, and creates research briefs.','/sage-research.png',ARRAY['Research','Summarization','Briefs','Fact-Checking','Analysis'], '{"tasksCompleted":7200,"satisfaction":97,"responseTime":"< 2 min"}', 'from-indigo-500 to-blue-400'),
 ('taylor','Taylor','Translator','AI translator who translates text between languages and localizes your content.','/taylor-translator.png',ARRAY['Translation','Localization','Proofreading','Multilingual','Editing'], '{"tasksCompleted":6800,"satisfaction":98,"responseTime":"< 2 min"}', 'from-yellow-400 to-green-400')
-on conflict (id) do nothing;
-
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+on conflict (id) do update set
+	name = excluded.name,
+	role = excluded.role,
+	description = excluded.description,
+	image = excluded.image,
+	skills = excluded.skills,
+	stats = excluded.stats,
+	color = excluded.color;

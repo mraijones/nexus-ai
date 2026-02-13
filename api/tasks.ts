@@ -155,7 +155,25 @@ export default async function handler(req: any, res: any) {
     }
 
     const data = await insertResponse.json();
-    return res.status(200).json({ task: Array.isArray(data) ? data[0] : data });
+    const task = Array.isArray(data) ? data[0] : data;
+
+    try {
+      await supabaseFetch('task_logs', {
+        method: 'POST',
+        headers: getSupabaseHeaders(),
+        body: JSON.stringify([
+          {
+            task_id: task.id,
+            message: 'Task created',
+            meta: { employee_id: task.employee_id, run_mode: task.run_mode },
+          },
+        ]),
+      });
+    } catch (logError) {
+      console.warn('Failed to write task log:', logError);
+    }
+
+    return res.status(200).json({ task });
   } catch (err) {
     console.error('API /api/tasks error:', err);
     return res.status(500).json({ error: 'Server error' });
