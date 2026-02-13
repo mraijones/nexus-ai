@@ -1,4 +1,22 @@
-import { supabaseAdmin } from '../server/supabase.js';
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
+
+function getSupabaseHeaders(extra?: Record<string, string>) {
+  return {
+    apikey: SUPABASE_KEY,
+    Authorization: `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json',
+    ...extra,
+  };
+}
+
+async function supabaseFetch(path: string, options: RequestInit) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    throw new Error('Supabase environment variables are missing');
+  }
+  const url = `${SUPABASE_URL}/rest/v1/${path}`;
+  return fetch(url, options);
+}
 
 // Simple mapping for auto-assignment
 // Refined mapping: multiple keywords per employee, fuzzy matching, fallback to least busy
@@ -51,12 +69,13 @@ async function autoAssignEmployee({ template, title, description }: { template?:
     }
   }
   if (bestMatch) return bestMatch;
-  // Fallback: least busy employee (random for now, could query task counts)
-  // Optionally, query the DB for least busy employee
-  // For now, pick a random employee from DB
-  const { data: employees, error } = await supabaseAdmin.from('ai_employees').select('id');
-  if (employees && employees.length > 0) {
-    return employees[Math.floor(Math.random() * employees.length)].id;
+  // Fallback: pick a random employee from DB
+  const response = await supabaseFetch('ai_employees?select=id', { method: 'GET', headers: getSupabaseHeaders() });
+  if (response.ok) {
+    const employees = await response.json();
+    if (Array.isArray(employees) && employees.length > 0) {
+      return employees[Math.floor(Math.random() * employees.length)].id;
+    }
   }
   return 'alex';
 }
@@ -69,6 +88,9 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+      return res.status(500).json({ error: 'Supabase environment variables are missing' });
+    }
     // Authentication: require user to be logged in (e.g., via header or session)
     // Example: expecting user_id in a custom header for demo; replace with real auth in production
     const authUserId = req.headers['x-user-id'] || null;
@@ -91,12 +113,12 @@ export default async function handler(req: any, res: any) {
     }
 
     // Validate employee exists
-    const { data: employee, error: employeeError } = await supabaseAdmin
-      .from('ai_employees')
-      .select('id')
-      .eq('id', employee_id)
-      .single();
-    if (employeeError || !employee) {
+    const employeeResponse = await supabaseFetch(
+      `ai_employees?id=eq.${encodeURIComponent(employee_id)}&select=id&limit=1`,
+      { method: 'GET', headers: getSupabaseHeaders() }
+    );
+    const employee = await employeeResponse.json();
+    if (!employeeResponse.ok || !Array.isArray(employee) || employee.length === 0) {
       return res.status(400).json({ error: 'Invalid employee_id' });
     }
 
@@ -111,9 +133,10 @@ export default async function handler(req: any, res: any) {
     }
 
     // Insert task
-    const { data, error } = await supabaseAdmin
-      .from('tasks')
-      .insert([
+    const insertResponse = await supabaseFetch('tasks?select=*', {
+      method: 'POST',
+      headers: getSupabaseHeaders({ Prefer: 'return=representation' }),
+      body: JSON.stringify([
         {
           user_id,
           employee_id,
@@ -122,16 +145,17 @@ export default async function handler(req: any, res: any) {
           priority,
           run_mode,
         },
-      ])
-      .select()
-      .single();
+      ]),
+    });
 
-    if (error) {
-      console.error('Insert task error:', error);
-      return res.status(500).json({ error: error.message || 'Insert failed' });
+    if (!insertResponse.ok) {
+      const errorText = await insertResponse.text();
+      console.error('Insert task error:', errorText);
+      return res.status(500).json({ error: errorText || 'Insert failed' });
     }
 
-    return res.status(200).json({ task: data });
+    const data = await insertResponse.json();
+    return res.status(200).json({ task: Array.isArray(data) ? data[0] : data });
   } catch (err) {
     console.error('API /api/tasks error:', err);
     return res.status(500).json({ error: 'Server error' });
