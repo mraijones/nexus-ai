@@ -34,6 +34,29 @@ Currently, two official plugins are available:
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
+## 🧭 How to see your updates
+
+### Local preview (fastest)
+1) Install deps: `npm install`  
+2) Add env vars in `.env.local` (copy `.env.example` if available):
+```
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+3) Run the app: `npm run dev` and open the URL printed by Vite (usually http://localhost:5173).  
+4) (Optional) Run the worker that processes tasks in another terminal: `npm run worker`.  
+5) If you haven’t run DB migrations yet, apply the SQL files in `supabase/migrations` using the Supabase SQL editor (or `supabase db push` if you use the CLI).
+
+### Production build check
+1) Ensure the same env vars are set.  
+2) Build: `npm run build`.  
+3) Preview the static output: `npm run preview` (serves the production bundle locally).
+
+### Deploy (e.g., Vercel)
+- Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as environment variables in the hosting platform.  
+- If using the background worker, configure its env vars too (`SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, etc., per `docs/integration.md`).  
+- Run/verify migrations before or during deployment so the schema matches the app.
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:

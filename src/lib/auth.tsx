@@ -13,6 +13,7 @@ type Profile = {
   id: string;
   full_name: string | null;
   subscription_tier: string | null;
+  company?: string | null;
 };
 
 type AuthContextValue = {
@@ -41,10 +42,19 @@ function ensureGlobalAuthListener(onUserChange: (user: User | null) => void) {
   }
 }
 
-// TODO: replace with your real profile fetch
-async function fetchUserProfile(userId: string): Promise<Profile | null> {
-  void userId;
-  return null;
+export async function fetchUserProfile(userId: string): Promise<Profile | null> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, full_name, subscription_tier, company')
+    .eq('id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching profile', error);
+    return null;
+  }
+
+  return data as Profile | null;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -84,14 +94,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   };
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, fullName: string, company?: string) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
     // Insert profile with full_name if sign up succeeded
     if (data?.user) {
       const { error: profileError } = await supabase
-        .from('profile')
-        .insert([{ id: data.user.id, full_name: fullName }]);
+        .from('profiles')
+        .insert([{ id: data.user.id, full_name: fullName, company }]);
       if (profileError) throw profileError;
     }
   };
