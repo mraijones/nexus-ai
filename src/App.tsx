@@ -11,7 +11,7 @@ import { HireEmployeePage } from './pages/HireEmployee';
 import  CreateTaskPage  from './pages/CreateTask';
 import { CheckoutPage } from './pages/Checkout';
 import { StatusPage } from './pages/Status';
-import { MyBusinessPage } from './pages/MyBusiness';
+import MyBusinessPage from './pages/MyBusinessNew';
 
 function App() {
   return (
