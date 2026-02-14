@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
-import { Star, Clock, ArrowRight } from 'lucide-react';
+import { Star, Clock } from 'lucide-react';
 import { tier4Roles, roles } from '@/data/employees';
 
 
