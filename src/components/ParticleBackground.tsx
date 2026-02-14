@@ -12,7 +12,7 @@ interface Particle {
 export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -38,7 +38,7 @@ export function ParticleBackground() {
       vy: (Math.random() - 0.5) * 0.5,
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.5 + 0.2,
-    }));
+    }) as Particle);
 
     // Animation loop
     const animate = () => {
