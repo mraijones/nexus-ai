@@ -325,7 +325,7 @@ export function LandingPage() {
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">10x</div>
-                <div className="text-sm text-nexus-gray mt-1">ROI Potential</div>
+                <div className="text-sm text-nexus-gray mt-1">Productivity Boost</div>
               </div>
             </div>
           </div>
@@ -882,7 +882,7 @@ export function LandingPage() {
             Ready to Transform Your Business?
           </h2>
           <p className="text-xl text-nexus-gray">
-            Join thousands of businesses already using NEXUS AI to scale faster and work smarter
+            Join successful businesses already using NEXUS AI to scale faster and work smarter
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
