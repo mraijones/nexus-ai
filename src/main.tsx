@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
 import React from 'react';
+import { Toaster } from '@/components/ui/sonner';
 
 // Simple error boundary for debugging
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <App />
+      <Toaster />
     </ErrorBoundary>
   </StrictMode>,
 );
