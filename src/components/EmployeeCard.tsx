@@ -21,7 +21,6 @@ export function EmployeeCard({
 }: EmployeeCardProps) {
   const getTierColor = (tier: number) => {
     const colors: Record<number, string> = {
-      0: 'from-green-500 to-green-600', // Free tier
       1: 'from-blue-500 to-cyan-500',
       2: 'from-purple-500 to-pink-500',
       3: 'from-orange-500 to-red-500',
@@ -32,7 +31,6 @@ export function EmployeeCard({
 
   const getTierBadgeColor = (tier: number) => {
     const colors: Record<number, string> = {
-      0: 'bg-green-500/20 text-green-400 border-green-500/30', // Free tier
       1: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
       2: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
       3: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
@@ -92,7 +90,7 @@ export function EmployeeCard({
 
             {/* Tier Badge */}
             <Badge className={`${getTierBadgeColor(employee.tier)} border`}>
-              {employee.tier === 0 ? 'FREE FOREVER' : `Tier ${employee.tier} - $${employee.pricing}/mo`}
+              Tier {employee.tier} - ${employee.pricing}/mo
             </Badge>
 
             {/* Description */}
@@ -129,10 +127,10 @@ export function EmployeeCard({
                   <Button
                     size="sm"
                     onClick={() => onHire(employee)}
-                    className={`flex-1 ${employee.tier === 0 ? 'bg-gradient-to-r from-green-500 to-green-600' : 'bg-nexus-gradient'} hover:opacity-90`}
+                    className="flex-1 bg-nexus-gradient hover:opacity-90"
                   >
                     <Zap className="w-4 h-4 mr-1" />
-                    {employee.tier === 0 ? 'Claim Free' : 'Hire Now'}
+                    Hire Now
                   </Button>
                 )}
               </div>
@@ -169,10 +167,10 @@ export function EmployeeCard({
               <h3 className="text-lg font-bold text-white mb-1">{employee.role}</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge className={`text-xs ${getTierBadgeColor(employee.tier)} border`}>
-                  {employee.tier === 0 ? 'FREE' : `Tier ${employee.tier}`}
+                  Tier {employee.tier}
                 </Badge>
-                <Badge variant="outline" className={`text-xs ${employee.tier === 0 ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-nexus-pink/20 text-nexus-pink border-nexus-pink/30'}`}>
-                  {employee.tier === 0 ? 'Forever Free' : `$${employee.pricing}/mo`}
+                <Badge variant="outline" className="text-xs bg-nexus-pink/20 text-nexus-pink border-nexus-pink/30">
+                  ${employee.pricing}/mo
                 </Badge>
               </div>
             </div>
