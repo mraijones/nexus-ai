@@ -2,7 +2,7 @@
 export interface Employee {
   id: string;
   role: string;
-  tier: 1 | 2 | 3 | 4;
+  tier: 0 | 1 | 2 | 3 | 4; // Tier 0 = Free
   pricing: number;
   gender: 'Male' | 'Female' | 'Non-binary';
   authorityLevel: 'Low' | 'Medium' | 'High' | 'Executive';
@@ -12,9 +12,82 @@ export interface Employee {
   skills: string[];
   availability: '24/7' | 'Business Hours';
   persona?: string; // For Tier 4 named personas
+  isFree?: boolean; // Marks free tier employees
 }
 
 export const all60Employees: Employee[] = [
+  // TIER 0 - FREE (5 demo employees @ $0/mo)
+  {
+    id: 't0-task-helper',
+    role: 'Task Helper',
+    tier: 0,
+    pricing: 0,
+    gender: 'Non-binary',
+    authorityLevel: 'Low',
+    description: 'A friendly AI assistant that helps you get organized and stay on track with your daily tasks',
+    responsibilities: ['Create to-do lists', 'Set reminders', 'Organize tasks by priority', 'Track progress'],
+    boundaries: ['Cannot access external tools', 'Cannot make decisions', 'Limited to 10 tasks per month'],
+    skills: ['Task Management', 'Organization', 'Reminders', 'Basic Planning'],
+    availability: '24/7',
+    isFree: true,
+  },
+  {
+    id: 't0-email-draft',
+    role: 'Email Draft Assistant',
+    tier: 0,
+    pricing: 0,
+    gender: 'Female',
+    authorityLevel: 'Low',
+    description: 'Helps you write professional emails and draft messages quickly',
+    responsibilities: ['Draft email responses', 'Proofread messages', 'Suggest improvements', 'Format emails'],
+    boundaries: ['Cannot send emails', 'Cannot access your inbox', 'Limited to basic templates'],
+    skills: ['Email Writing', 'Proofreading', 'Professional Communication', 'Grammar'],
+    availability: '24/7',
+    isFree: true,
+  },
+  {
+    id: 't0-note-taker',
+    role: 'Note Taker',
+    tier: 0,
+    pricing: 0,
+    gender: 'Male',
+    authorityLevel: 'Low',
+    description: 'Takes notes from your meetings and conversations, helping you remember important details',
+    responsibilities: ['Take meeting notes', 'Summarize key points', 'Create action items', 'Organize notes'],
+    boundaries: ['Cannot transcribe audio', 'Cannot attend meetings', 'Basic note-taking only'],
+    skills: ['Note Taking', 'Summarization', 'Organization', 'Documentation'],
+    availability: '24/7',
+    isFree: true,
+  },
+  {
+    id: 't0-idea-brainstormer',
+    role: 'Idea Brainstormer',
+    tier: 0,
+    pricing: 0,
+    gender: 'Female',
+    authorityLevel: 'Low',
+    description: 'Helps you brainstorm ideas and think through creative solutions to problems',
+    responsibilities: ['Generate ideas', 'Suggest alternatives', 'Ask clarifying questions', 'Organize thoughts'],
+    boundaries: ['Cannot make decisions', 'Cannot implement ideas', 'Basic brainstorming only'],
+    skills: ['Creative Thinking', 'Brainstorming', 'Problem Solving', 'Ideation'],
+    availability: '24/7',
+    isFree: true,
+  },
+  {
+    id: 't0-study-buddy',
+    role: 'Study Buddy',
+    tier: 0,
+    pricing: 0,
+    gender: 'Non-binary',
+    authorityLevel: 'Low',
+    description: 'Helps you study and learn new topics by creating flashcards and quizzes',
+    responsibilities: ['Create study materials', 'Generate practice questions', 'Explain concepts', 'Track learning progress'],
+    boundaries: ['Cannot grade assignments', 'Cannot access educational databases', 'Basic study help only'],
+    skills: ['Education Support', 'Study Techniques', 'Question Generation', 'Learning Assistance'],
+    availability: '24/7',
+    isFree: true,
+  },
+
   // TIER 1 - Entry Level (15 roles @ $150-300/mo)
   {
     id: 't1-social-media',
@@ -813,8 +886,12 @@ export const all60Employees: Employee[] = [
 ];
 
 // Helper functions to filter by tier
-export const getTierEmployees = (tier: 1 | 2 | 3 | 4): Employee[] => {
+export const getTierEmployees = (tier: 0 | 1 | 2 | 3 | 4): Employee[] => {
   return all60Employees.filter((emp) => emp.tier === tier);
+};
+
+export const getFreeEmployees = (): Employee[] => {
+  return all60Employees.filter((emp) => emp.tier === 0 || emp.isFree);
 };
 
 export const getTier4Personas = (): Employee[] => {
@@ -823,6 +900,7 @@ export const getTier4Personas = (): Employee[] => {
 
 export const getAllTiers = () => {
   return {
+    tier0: getTierEmployees(0),
     tier1: getTierEmployees(1),
     tier2: getTierEmployees(2),
     tier3: getTierEmployees(3),

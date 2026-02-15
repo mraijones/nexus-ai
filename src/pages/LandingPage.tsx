@@ -41,6 +41,7 @@ export function LandingPage() {
   const tier4Employees = getTier4Personas();
   
   // Get employees by tier for the grid
+  const tier0Employees = all60Employees.filter(e => e.tier === 0); // Free employees
   const tier1Employees = all60Employees.filter(e => e.tier === 1);
   const tier2Employees = all60Employees.filter(e => e.tier === 2);
   const tier3Employees = all60Employees.filter(e => e.tier === 3);
@@ -203,16 +204,28 @@ export function LandingPage() {
 
   const faqItems = [
     {
+      question: 'Is there really a free version?',
+      answer: 'Yes! Our free tier includes 5 AI employees forever with no credit card required. You get Task Helper, Email Draft Assistant, Note Taker, Idea Brainstormer, and Study Buddy - all completely free with no time limits.',
+    },
+    {
+      question: 'What if I cannot afford a paid subscription?',
+      answer: 'No worries! Our 5 free AI employees are designed to provide real value forever. You can accomplish a lot with them, and you can always upgrade later when you are ready. We also offer student and nonprofit discounts - contact us to learn more.',
+    },
+    {
+      question: 'Do I need a credit card to start?',
+      answer: 'No! You can sign up and start using our 5 free AI employees without entering any payment information. Only upgrade to paid tiers when you are ready.',
+    },
+    {
       question: 'How does the 30-day lock-in work?',
-      answer: 'When you hire an AI employee, you commit to keeping them for at least 30 days. This ensures proper integration and allows you to see the full value. After 30 days, you can fire them at any time with no penalty.',
+      answer: 'The 30-day lock-in only applies to paid employees. When you hire a paid AI employee, you commit to keeping them for at least 30 days. This ensures proper integration and allows you to see the full value. Free employees have no lock-in period.',
     },
     {
       question: 'Can I hire multiple employees?',
-      answer: 'Absolutely! You can hire as many AI employees as you need across all tiers. Each employee is billed separately based on their tier pricing.',
+      answer: 'Absolutely! You can hire as many AI employees as you need across all tiers. Start with our 5 free employees, then add paid employees when you need more advanced capabilities.',
     },
     {
       question: 'What happens if I am not satisfied?',
-      answer: 'We offer a satisfaction guarantee. If you are not happy with an employee\'s performance, contact our support team and we will work with you to find a solution or provide a credit.',
+      answer: 'We offer a satisfaction guarantee on paid tiers. If you are not happy with an employee\'s performance, contact our support team and we will work with you to find a solution or provide a credit. Our free tier has no risk - try it and see!',
     },
     {
       question: 'How do I assign tasks to my employees?',
@@ -220,11 +233,11 @@ export function LandingPage() {
     },
     {
       question: 'Are there any setup fees?',
-      answer: 'No! There are no setup fees, hidden costs, or long-term contracts. Pay only for the employees you hire on a monthly basis.',
+      answer: 'No! There are no setup fees, hidden costs, or long-term contracts. Start free, and only pay for additional employees if you want them.',
     },
     {
-      question: 'Can I upgrade or downgrade tiers?',
-      answer: 'Yes! You can change your employees at any time. Higher tier employees offer more advanced capabilities and strategic thinking.',
+      question: 'Can I upgrade or downgrade later?',
+      answer: 'Yes! You can add or remove paid employees at any time. Your free employees are always available.',
     },
   ];
 
@@ -269,8 +282,8 @@ export function LandingPage() {
           <div className="max-w-5xl mx-auto text-center space-y-8">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-light backdrop-blur-lg animate-fade-in">
-              <Sparkles className="w-4 h-4 text-nexus-cyan animate-pulse" />
-              <span className="text-sm text-white font-medium">The Future of Work is Here</span>
+              <Sparkles className="w-4 h-4 text-green-400 animate-pulse" />
+              <span className="text-sm text-white font-medium">🎉 Start FREE Forever - No Credit Card Required</span>
             </div>
 
             {/* Headline */}
@@ -284,7 +297,7 @@ export function LandingPage() {
 
             {/* Subheading */}
             <p className="text-xl sm:text-2xl text-nexus-gray max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              Hire elite AI employees across 60 specialized roles. No training required. Deploy instantly. Scale infinitely.
+              5 FREE AI employees + 60 premium roles. No training required. Deploy instantly. <span className="text-green-400 font-semibold">Starting at $0/month.</span>
             </p>
 
             {/* CTAs */}
@@ -292,35 +305,40 @@ export function LandingPage() {
               <Button
                 onClick={() => navigate('/auth')}
                 size="lg"
-                className="magnetic-btn bg-nexus-gradient text-white font-bold px-8 py-6 text-lg rounded-xl hover:scale-105 transition-transform shadow-2xl shadow-nexus-cyan/50 group"
+                className="magnetic-btn bg-gradient-to-r from-green-500 to-green-600 text-white font-bold px-8 py-6 text-lg rounded-xl hover:scale-105 transition-transform shadow-2xl shadow-green-500/50 group"
               >
-                Start Free Trial
+                Start FREE Forever
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
-                onClick={() => document.getElementById('employees')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('free-employees')?.scrollIntoView({ behavior: 'smooth' })}
                 size="lg"
                 variant="outline"
                 className="magnetic-btn border-2 border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl backdrop-blur-lg"
               >
-                Browse Employees
+                View Free Employees
                 <ChevronDown className="ml-2 w-5 h-5" />
               </Button>
             </div>
 
+            {/* Free tier badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500/20 border border-green-500/30 backdrop-blur-lg animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
+              <span className="text-sm text-green-400 font-medium">✓ No credit card required • ✓ Cancel anytime • ✓ 5 free AI employees included</span>
+            </div>
+
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto pt-12 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+            <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto pt-8 animate-fade-in-up" style={{ animationDelay: '0.9s' }}>
               <div className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">60+</div>
-                <div className="text-sm text-nexus-gray mt-1">AI Employees</div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-green-400 to-nexus-cyan bg-clip-text text-transparent">FREE</div>
+                <div className="text-sm text-nexus-gray mt-1">To Get Started</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">65</div>
+                <div className="text-sm text-nexus-gray mt-1">Total AI Employees</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">24/7</div>
                 <div className="text-sm text-nexus-gray mt-1">Always Available</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">100%</div>
-                <div className="text-sm text-nexus-gray mt-1">Success Rate</div>
               </div>
             </div>
           </div>
@@ -366,6 +384,58 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* FREE Employees Section */}
+      <section id="free-employees" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-nexus-dark to-green-900/10 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-gradient-radial from-green-500/10 via-transparent to-transparent opacity-50" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent" />
+        
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="text-center mb-12">
+            <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-sm px-4 py-2 mb-4 animate-pulse">
+              100% FREE FOREVER
+            </Badge>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
+              <span className="bg-gradient-to-r from-green-400 via-nexus-cyan to-green-400 bg-clip-text text-transparent">
+                Start Free with 5 AI Employees
+              </span>
+            </h2>
+            <p className="text-xl text-nexus-gray max-w-3xl mx-auto">
+              No credit card required. No hidden fees. No time limits. Get started today with our free AI helpers.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+            {tier0Employees.map((employee) => (
+              <EmployeeCard
+                key={employee.id}
+                employee={employee}
+                onQuickView={handleQuickView}
+                onHire={handleHire}
+                variant="featured"
+              />
+            ))}
+          </div>
+
+          <div className="text-center space-y-4">
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400">
+              <Star className="w-5 h-5" />
+              <span className="font-semibold">Perfect for students, hobbyists, and those getting started</span>
+            </div>
+            <div>
+              <Button
+                onClick={() => navigate('/auth')}
+                size="lg"
+                className="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold px-12 py-6 text-lg rounded-xl hover:scale-105 transition-transform shadow-2xl shadow-green-500/50"
+              >
+                Claim Your Free Employees Now
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 60 Employees Grid - Organized by Tier */}
       <section id="employees" className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-dark/50">
         <div className="container mx-auto max-w-7xl">
@@ -374,7 +444,7 @@ export function LandingPage() {
               Meet Your New Workforce
             </h2>
             <p className="text-xl text-nexus-gray max-w-3xl mx-auto">
-              60 elite AI employees across 4 tiers, ready to transform your business
+              65 total AI employees (5 FREE + 60 premium) across 4 tiers, ready to transform your business
             </p>
           </div>
 
@@ -871,21 +941,24 @@ export function LandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-dark text-center">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-nexus-dark to-green-900/10 text-center">
         <div className="container mx-auto max-w-4xl space-y-8">
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30 px-4 py-2 mb-4">
+            💯 100% FREE TO START
+          </Badge>
           <h2 className="text-4xl sm:text-5xl font-bold text-white">
             Ready to Transform Your Business?
           </h2>
           <p className="text-xl text-nexus-gray">
-            Join thousands of businesses already using NEXUS AI to scale faster and work smarter
+            Start FREE with 5 AI employees. No credit card. No risk. Upgrade only if you love it.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               onClick={() => navigate('/auth')}
               size="lg"
-              className="bg-nexus-gradient text-white font-bold px-12 py-6 text-lg rounded-xl hover:scale-105 transition-transform shadow-2xl shadow-nexus-cyan/50"
+              className="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold px-12 py-6 text-lg rounded-xl hover:scale-105 transition-transform shadow-2xl shadow-green-500/50"
             >
-              Start Free Trial
+              Start FREE Forever
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
             <Button
@@ -894,9 +967,12 @@ export function LandingPage() {
               variant="outline"
               className="border-2 border-white/30 text-white hover:bg-white/10 px-12 py-6 text-lg rounded-xl"
             >
-              Browse All 60 Employees
+              Browse All 65 Employees
             </Button>
           </div>
+          <p className="text-sm text-green-400 font-medium">
+            ✓ 5 free AI employees included forever • ✓ No credit card required • ✓ Upgrade anytime
+          </p>
         </div>
       </section>
 
