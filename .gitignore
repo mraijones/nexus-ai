@@ -13,3 +13,4 @@ dist/
 # editor
 .vscode/
 
+.env*.local
