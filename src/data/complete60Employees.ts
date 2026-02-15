@@ -26,7 +26,7 @@ export const all60Employees: Employee[] = [
     authorityLevel: 'Low',
     description: 'A friendly AI assistant that helps you get organized and stay on track with your daily tasks',
     responsibilities: ['Create to-do lists', 'Set reminders', 'Organize tasks by priority', 'Track progress'],
-    boundaries: ['Cannot access external tools', 'Cannot make decisions', 'Limited to 10 tasks per month'],
+    boundaries: ['Cannot access external tools', 'Cannot make decisions', 'Free tier includes basic features'],
     skills: ['Task Management', 'Organization', 'Reminders', 'Basic Planning'],
     availability: '24/7',
     isFree: true,

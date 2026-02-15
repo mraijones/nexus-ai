@@ -333,8 +333,8 @@ export function LandingPage() {
                 <div className="text-sm text-nexus-gray mt-1">To Get Started</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">65</div>
-                <div className="text-sm text-nexus-gray mt-1">Total AI Employees</div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">5 + 60</div>
+                <div className="text-sm text-nexus-gray mt-1">Free + Premium</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold bg-gradient-to-r from-nexus-cyan to-nexus-pink bg-clip-text text-transparent">24/7</div>
@@ -401,7 +401,7 @@ export function LandingPage() {
               </span>
             </h2>
             <p className="text-xl text-nexus-gray max-w-3xl mx-auto">
-              No credit card required. No hidden fees. No time limits. Get started today with our free AI helpers.
+              No credit card required. No hidden fees. Get started today with our free AI helpers. <span className="text-sm text-nexus-gray/70 block mt-2">(Free tier includes 10 tasks per employee per month)</span>
             </p>
           </div>
 
@@ -444,7 +444,7 @@ export function LandingPage() {
               Meet Your New Workforce
             </h2>
             <p className="text-xl text-nexus-gray max-w-3xl mx-auto">
-              65 total AI employees (5 FREE + 60 premium) across 4 tiers, ready to transform your business
+              65 total AI employees (5 FREE + 60 premium) across 5 tiers, ready to transform your business
             </p>
           </div>
 
