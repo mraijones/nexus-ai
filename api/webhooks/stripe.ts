@@ -4,10 +4,9 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 export const config = { api: { bodyParser: false } };
 
-function buffer(readable: any): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    const chunks: any[] = [];
-    readable.on('data', (chunk: any) => chunks.push(Buffer.from(chunk)));
+    const chunks: Buffer[] = [];
+    readable.on('data', (chunk: Buffer | string) => chunks.push(Buffer.from(chunk)));
     readable.on('end', () => resolve(Buffer.concat(chunks)));
     readable.on('error', reject);
   });
@@ -111,9 +110,9 @@ async function handleCheckoutCompleted(
 
   // Create subscription record
   if (session.subscription) {
-    const subscription = await stripe.subscriptions.retrieve(
+    const subscription = (await stripe.subscriptions.retrieve(
       session.subscription as string
-    );
+    )) as Stripe.Subscription;
 
     await supabase.from('subscriptions').insert({
       user_id: userId,
@@ -185,12 +184,10 @@ async function handleSubscriptionUpdate(
     .update({
       status: subscription.status,
       amount: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
-      next_billing_date: new Date(subscription.current_period_end * 1000).toISOString(),
-      updated_at: new Date().toISOString(),
+      next_billing_date: subscription.current_period_end ? new Date((subscription.current_period_end as number) * 1000).toISOString() : null,
     })
     .eq('stripe_subscription_id', subscription.id);
 
-  // Create payment event
   await supabase.from('payment_events').insert({
     user_id: existingSubscription.user_id,
     event_type: 'subscription_updated',
