@@ -4,6 +4,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 export const config = { api: { bodyParser: false } };
 
+function buffer(readable: NodeJS.ReadableStream): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     readable.on('data', (chunk: Buffer | string) => chunks.push(Buffer.from(chunk)));
