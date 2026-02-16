@@ -124,7 +124,7 @@ async function handleCheckoutCompleted(
       amount: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
       currency: subscription.currency,
       billing_cycle: subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'annual' : 'monthly',
-      next_billing_date: new Date(subscription.current_period_end * 1000).toISOString(),
+      next_billing_date: new Date((subscription.current_period_end as number) * 1000).toISOString(),
     });
 
     // Create payment event
@@ -185,7 +185,7 @@ async function handleSubscriptionUpdate(
     .update({
       status: subscription.status,
       amount: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
-      next_billing_date: subscription.current_period_end ? new Date((subscription.current_period_end as number) * 1000).toISOString() : null,
+      next_billing_date: subscription.current_period_end ? new Date((subscription.current_period_end) * 1000).toISOString() : null,
     })
     .eq('stripe_subscription_id', subscription.id);
 
