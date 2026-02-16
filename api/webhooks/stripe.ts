@@ -1,25 +1,39 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-01-27.acacia',
-});
+export const config = { api: { bodyParser: false } };
 
-const supabase = createClient(
-  process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+function buffer(readable: any): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: any[] = [];
+    readable.on('data', (chunk: any) => chunks.push(Buffer.from(chunk)));
+    readable.on('end', () => resolve(Buffer.concat(chunks)));
+    readable.on('error', reject);
+  });
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const sig = req.headers['stripe-signature'];
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  if (!stripeKey) return res.status(500).json({ error: 'Missing STRIPE_SECRET_KEY' });
+  if (!webhookSecret) return res.status(500).json({ error: 'Missing STRIPE_WEBHOOK_SECRET' });
+  if (!supabaseUrl) return res.status(500).json({ error: 'Missing SUPABASE_URL' });
+  if (!supabaseServiceKey) return res.status(500).json({ error: 'Missing SUPABASE_SERVICE_ROLE_KEY' });
+
+  const stripe = new Stripe(stripeKey);
+  const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: { persistSession: false },
+  });
+
+  const sig = req.headers['stripe-signature'];
   if (!sig) {
     return res.status(400).json({ error: 'Missing stripe-signature header' });
   }
@@ -27,11 +41,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      webhookSecret
-    );
+    const rawBody = await buffer(req);
+    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err);
     return res.status(400).json({ error: 'Invalid signature' });
@@ -43,32 +54,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        await handleCheckoutCompleted(session);
+        await handleCheckoutCompleted(stripe, supabase, session);
         break;
       }
 
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
-        await handleSubscriptionUpdate(subscription);
+        await handleSubscriptionUpdate(supabase, subscription);
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        await handleSubscriptionDeleted(subscription);
+        await handleSubscriptionDeleted(supabase, subscription);
         break;
       }
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice;
-        await handleInvoicePaymentSucceeded(invoice);
+        await handleInvoicePaymentSucceeded(supabase, invoice);
         break;
       }
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
-        await handleInvoicePaymentFailed(invoice);
+        await handleInvoicePaymentFailed(supabase, invoice);
         break;
       }
 
@@ -76,14 +87,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log(`Unhandled event type: ${event.type}`);
     }
 
-    return res.status(200).json({ received: true });
+    return res.status(200).json({ received: true, type: event.type });
   } catch (error) {
     console.error('Error processing webhook:', error);
     return res.status(500).json({ error: 'Webhook processing failed' });
   }
 }
 
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+async function handleCheckoutCompleted(
+  stripe: Stripe,
+  supabase: SupabaseClient,
+  session: Stripe.Checkout.Session
+) {
   const userId = session.metadata?.user_id;
   const employeeId = session.metadata?.employee_id;
   const roleId = session.metadata?.role_id;
@@ -150,7 +165,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   console.log('Checkout completed for user:', userId);
 }
 
-async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
+async function handleSubscriptionUpdate(
+  supabase: SupabaseClient,
+  subscription: Stripe.Subscription
+) {
   const { data: existingSubscription } = await supabase
     .from('subscriptions')
     .select('id, user_id')
@@ -183,7 +201,10 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
   console.log('Subscription updated:', subscription.id);
 }
 
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+async function handleSubscriptionDeleted(
+  supabase: SupabaseClient,
+  subscription: Stripe.Subscription
+) {
   const { data: existingSubscription } = await supabase
     .from('subscriptions')
     .select('id, user_id')
@@ -220,7 +241,10 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   console.log('Subscription canceled:', subscription.id);
 }
 
-async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
+async function handleInvoicePaymentSucceeded(
+  supabase: SupabaseClient,
+  invoice: Stripe.Invoice
+) {
   const customerId = invoice.customer as string;
 
   const { data: subscription } = await supabase
@@ -248,7 +272,10 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   console.log('Invoice payment succeeded:', invoice.id);
 }
 
-async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
+async function handleInvoicePaymentFailed(
+  supabase: SupabaseClient,
+  invoice: Stripe.Invoice
+) {
   const customerId = invoice.customer as string;
 
   const { data: subscription } = await supabase
