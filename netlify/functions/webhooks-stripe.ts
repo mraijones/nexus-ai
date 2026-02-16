@@ -1,17 +1,7 @@
-import type { Context } from "@netlify/functions";
 import Stripe from 'stripe';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-function buffer(readable: NodeJS.ReadableStream): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    readable.on('data', (chunk: Buffer | string) => chunks.push(Buffer.from(chunk)));
-    readable.on('end', () => resolve(Buffer.concat(chunks)));
-    readable.on('error', reject);
-  });
-}
-
-export default async function handler(req: Request, context: Context) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
   }
@@ -41,7 +31,7 @@ export default async function handler(req: Request, context: Context) {
   try {
     const rawBody = await req.arrayBuffer();
     event = stripe.webhooks.constructEvent(Buffer.from(rawBody), sig, webhookSecret);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Webhook signature verification failed:', err);
     return new Response(JSON.stringify({ error: 'Invalid signature' }), { status: 400 });
   }
@@ -122,7 +112,8 @@ async function handleCheckoutCompleted(
       amount: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
       currency: subscription.currency,
       billing_cycle: subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'annual' : 'monthly',
-      next_billing_date: new Date((subscription.current_period_end as number) * 1000).toISOString(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      next_billing_date: new Date(((subscription as any).current_period_end as number) * 1000).toISOString(),
     });
 
     // Create payment event
@@ -183,7 +174,8 @@ async function handleSubscriptionUpdate(
     .update({
       status: subscription.status,
       amount: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
-      next_billing_date: subscription.current_period_end ? new Date((subscription.current_period_end) * 1000).toISOString() : null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      next_billing_date: (subscription as any).current_period_end ? new Date(((subscription as any).current_period_end as number) * 1000).toISOString() : null,
     })
     .eq('stripe_subscription_id', subscription.id);
 

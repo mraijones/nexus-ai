@@ -1,11 +1,8 @@
-import type { Context } from "@netlify/functions";
-
 export const config = {
-  path: "/api/nexus-execute",
   rateLimit: {
-    windowLimit: 20,      // Max 20 tasks
-    windowSize: 60,       // Per 60 seconds
-    aggregateBy: ["ip"], // Per individual client IP
+    windowLimit: 20,      // Allow 20 tasks
+    windowSize: 60,       // Every 60 seconds
+    aggregateBy: ["ip"], // Limit per individual client
   },
 };
 
@@ -92,7 +89,7 @@ async function autoAssignEmployee({ template, title, description }: { template?:
 }
 
 // Netlify-style serverless function handler
-export default async function handler(req: Request, context: Context) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
   }
@@ -106,7 +103,9 @@ export default async function handler(req: Request, context: Context) {
     // Example: expecting user_id in a custom header for demo; replace with real auth in production
     const authUserId = req.headers.get('x-user-id') || null;
     const body = await req.json();
-    let { user_id, employee_id, title, description, priority = 'medium', run_mode = 'auto', template } = body;
+    const { user_id, title, description, priority = 'medium', template } = body;
+    let { employee_id } = body;
+    const { run_mode = 'auto' } = body;
 
     // Validate required fields
     if (!user_id || !title || !description) {

@@ -185,7 +185,7 @@ async function handleSubscriptionUpdate(
     .update({
       status: subscription.status,
       amount: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
-      next_billing_date: subscription.current_period_end ? new Date((subscription.current_period_end) * 1000).toISOString() : null,
+      next_billing_date: subscription.current_period_end ? new Date((subscription.current_period_end as any as number) * 1000).toISOString() : null,
     })
     .eq('stripe_subscription_id', subscription.id);
 

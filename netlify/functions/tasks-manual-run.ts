@@ -1,5 +1,3 @@
-import type { Context } from "@netlify/functions";
-
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
 
@@ -25,7 +23,7 @@ function getFunctionsBaseUrl() {
   return SUPABASE_URL.replace('.supabase.co', '.functions.supabase.co');
 }
 
-export default async function handler(req: Request, context: Context) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
   }
@@ -77,7 +75,7 @@ export default async function handler(req: Request, context: Context) {
     });
 
     const responseText = await functionResponse.text();
-    let responseJson: any = null;
+    let responseJson: unknown = null;
     try {
       responseJson = JSON.parse(responseText);
     } catch {

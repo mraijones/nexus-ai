@@ -1,5 +1,3 @@
-import type { Context } from "@netlify/functions";
-
 interface DatabaseStatus {
   connected: boolean;
   message?: string;
@@ -20,7 +18,7 @@ interface HealthStatus {
  * Health check endpoint
  * Returns system status and database connectivity
  */
-export default async function handler(req: Request, context: Context) {
+export default async function handler(req: Request) {
   // Allow GET requests for health checks
   if (req.method !== 'GET') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
