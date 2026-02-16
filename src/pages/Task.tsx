@@ -65,7 +65,7 @@ export function TaskPage() {
   async function handleManualRun() {
     if (!task) return;
     try {
-      const resp = await fetch('/api/tasks/manual-run', {
+      const resp = await fetch('/.netlify/functions/tasks-manual-run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-user-id': user?.id || '' },
         body: JSON.stringify({ task_id: task.id }),

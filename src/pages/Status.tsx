@@ -25,7 +25,7 @@ export function StatusPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/health');
+      const response = await fetch('/.netlify/functions/health');
       const data = await response.json();
       setStatus(data);
     } catch (err) {

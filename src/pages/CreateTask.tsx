@@ -145,7 +145,7 @@ export default function CreateTaskPage() {
     setIsSubmitting(true);
 
     try {
-      const resp = await fetch('/api/tasks', {
+      const resp = await fetch('/.netlify/functions/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-user-id': user.id },
         body: JSON.stringify({
