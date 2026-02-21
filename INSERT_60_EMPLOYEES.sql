@@ -1,13 +1,27 @@
 -- SQL INSERT statements for all 60 AI Employees
 -- Copy and paste this entire file into your Supabase SQL Editor
 
--- First, let's make sure the ai_employees table exists with the right structure
--- (This should already be created, but just in case)
-
--- Insert all 60 employees
+-- Insert all 60 employees with tier as a proper column
 INSERT INTO ai_employees (id, name, role, description, skills, stats, color) VALUES
 
 -- TIER 1 - Entry Level (15 employees)
+('t1-social-media', 'Social Media Assistant', 'Social Media Assistant', 'Schedules posts, engages with followers, and manages basic social media tasks', ARRAY['Social Media Management','Content Scheduling','Community Engagement','Analytics'], '{"tier":1,"pricing":150,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-email-support', 'Email Support Specialist', 'Email Support Specialist', 'Handles customer inquiries via email with quick, helpful responses', ARRAY['Email Support','Customer Service','Ticketing Systems','Communication'], '{"tier":1,"pricing":150,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-data-entry', 'Data Entry Clerk', 'Data Entry Clerk', 'Accurately inputs data into systems with speed and precision', ARRAY['Data Entry','Excel','CRM Systems','Attention to Detail'], '{"tier":1,"pricing":160,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-appointment-scheduler', 'Appointment Scheduler', 'Appointment Scheduler', 'Manages calendars and schedules appointments efficiently', ARRAY['Calendar Management','Scheduling Software','Time Zone Coordination','Communication'], '{"tier":1,"pricing":170,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-chat-support', 'Live Chat Support', 'Live Chat Support', 'Provides real-time chat support to website visitors', ARRAY['Live Chat','Customer Service','Product Knowledge','Multitasking'], '{"tier":1,"pricing":180,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-transcription', 'Transcriptionist', 'Transcriptionist', 'Transcribes audio and video content into text', ARRAY['Transcription','Typing','Audio Processing','Documentation'], '{"tier":1,"pricing":190,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-research-assistant', 'Research Assistant', 'Research Assistant', 'Conducts basic research and gathers information', ARRAY['Research','Information Gathering','Summarization','Fact-Checking'], '{"tier":1,"pricing":200,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-blog-writer', 'Blog Content Writer', 'Blog Content Writer', 'Writes blog posts and web content', ARRAY['Content Writing','SEO','Blogging','Copywriting'], '{"tier":1,"pricing":210,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-social-monitor', 'Social Media Monitor', 'Social Media Monitor', 'Monitors social media mentions and brand reputation', ARRAY['Social Listening','Monitoring Tools','Sentiment Analysis','Reporting'], '{"tier":1,"pricing":220,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-email-marketing', 'Email Campaign Assistant', 'Email Campaign Assistant', 'Assists with email marketing campaigns', ARRAY['Email Marketing','Mailchimp','Template Design','A/B Testing'], '{"tier":1,"pricing":230,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-product-lister', 'Product Listing Specialist', 'Product Listing Specialist', 'Creates and manages product listings on e-commerce platforms', ARRAY['E-commerce','Product Descriptions','SEO','Inventory Management'], '{"tier":1,"pricing":240,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-invoice-processor', 'Invoice Processor', 'Invoice Processor', 'Processes invoices and payment documentation', ARRAY['Invoicing','Accounting Software','Payment Processing','Record Keeping'], '{"tier":1,"pricing":250,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-survey-analyst', 'Survey Data Analyst', 'Survey Data Analyst', 'Analyzes survey results and compiles reports', ARRAY['Data Analysis','Survey Tools','Excel','Reporting'], '{"tier":1,"pricing":260,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-file-organizer', 'Digital File Organizer', 'Digital File Organizer', 'Organizes and maintains digital file systems', ARRAY['File Management','Cloud Storage','Organization','Document Control'], '{"tier":1,"pricing":270,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+('t1-qc-tester', 'Quality Control Tester', 'Quality Control Tester', 'Tests products and processes for quality assurance', ARRAY['QA Testing','Bug Tracking','Test Cases','Documentation'], '{"tier":1,"pricing":280,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
+
+-- TIER 2 - Professional (20 employees)
 ('t1-social-media', 'Social Media Assistant', 'Social Media Assistant', 'Schedules posts, engages with followers, and manages basic social media tasks', ARRAY['Social Media Management','Content Scheduling','Community Engagement','Analytics'], '{"tier":1,"pricing":150,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
 ('t1-email-support', 'Email Support Specialist', 'Email Support Specialist', 'Handles customer inquiries via email with quick, helpful responses', ARRAY['Email Support','Customer Service','Ticketing Systems','Communication'], '{"tier":1,"pricing":150,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
 ('t1-data-entry', 'Data Entry Clerk', 'Data Entry Clerk', 'Accurately inputs data into systems with speed and precision', ARRAY['Data Entry','Excel','CRM Systems','Attention to Detail'], '{"tier":1,"pricing":160,"availability":"24/7","authorityLevel":"Low"}', 'from-blue-400 to-cyan-400'),
@@ -83,12 +97,18 @@ ON CONFLICT (id) DO UPDATE SET
   stats = EXCLUDED.stats,
   color = EXCLUDED.color;
 
--- Verify the insert
-SELECT tier, COUNT(*) as count 
-FROM (
-  SELECT (stats->>'tier')::int as tier 
-  FROM ai_employees
-) t
+-- Verify the insert - Fixed query to extract tier correctly
+SELECT 
+  CASE 
+    WHEN id LIKE 't1-%' THEN 1
+    WHEN id LIKE 't2-%' THEN 2
+    WHEN id LIKE 't3-%' THEN 3
+    WHEN id LIKE 't4-%' THEN 4
+    ELSE NULL
+  END as tier, 
+  COUNT(*) as count 
+FROM ai_employees
+WHERE id LIKE 't[1-4]-%'
 GROUP BY tier
 ORDER BY tier;
 
