@@ -12,6 +12,7 @@ import  CreateTaskPage  from './pages/CreateTask';
 import { CheckoutPage } from './pages/Checkout';
 import { StatusPage } from './pages/Status';
 import MyBusinessPage from './pages/MyBusinessNew';
+import AIPlayground from './pages/AIPlayground';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/tasks/:id" element={<TaskPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/ai-playground" element={<AIPlayground />} />
             
             {/* Redirect unknown routes */}
             <Route path="*" element={<Navigate to="/" replace />} />

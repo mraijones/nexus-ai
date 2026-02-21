@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { EmployeeCard } from '@/components/EmployeeCard';
+import AgentTerminal from '@/components/AgentTerminal';
 import { 
   ArrowRight, 
   Sparkles, 
@@ -334,6 +335,76 @@ export function LandingPage() {
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <ChevronDown className="w-8 h-8 text-nexus-cyan" />
+        </div>
+      </section>
+
+      {/* Agent Terminal Showcase - Live Demo */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-dark/80">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <Badge className="bg-nexus-cyan/20 text-nexus-cyan border-nexus-cyan/30 text-sm px-4 py-2 mb-4 inline-block">
+              LIVE DEMONSTRATION
+            </Badge>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
+              Watch AI Employees in Action
+            </h2>
+            <p className="text-xl text-nexus-gray max-w-3xl mx-auto">
+              See how our AI workforce executes tasks in real-time with precision and professionalism
+            </p>
+          </div>
+
+          <AgentTerminal
+            agentName="AURORA-7"
+            missionContext="Enterprise client communication strategy"
+            workType="STRATEGIC OUTREACH"
+            liveOutput={`> ANALYZING TARGET AUDIENCE DEMOGRAPHICS...
+> CRAFTING PERSONALIZED MESSAGE FRAMEWORK...
+> OPTIMIZING FOR CONVERSION AND ENGAGEMENT...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Subject: Transforming Your Enterprise Operations
+
+Dear Leadership Team,
+
+I've completed a comprehensive analysis of your current 
+operational infrastructure and identified three critical 
+optimization opportunities:
+
+1. WORKFLOW AUTOMATION
+   • 47% efficiency gain potential
+   • ROI projection: 312% within 6 months
+   
+2. STRATEGIC RESOURCE ALLOCATION  
+   • Reallocate $2.3M in redundant processes
+   • Deploy to high-impact growth initiatives
+
+3. COMPETITIVE POSITIONING
+   • Market gap identified in Q2 expansion
+   • First-mover advantage window: 90 days
+
+Our AI workforce stands ready to execute these initiatives
+with precision, 24/7 availability, and zero overhead costs.
+
+Next steps: Schedule 30-minute strategy session to discuss
+implementation roadmap and expected outcomes.
+
+Best regards,
+Aurora-7 | Strategic Operations Director
+NEXUS AI Workforce Division
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+> TASK COMPLETED IN 2.3 SECONDS
+> QUALITY SCORE: 98.7%
+> READY FOR NEXT ASSIGNMENT...`}
+          />
+
+          <div className="text-center mt-8">
+            <p className="text-nexus-gray text-sm">
+              This is a live example of how our Tier 4 Strategic Executives operate in real business scenarios
+            </p>
+          </div>
         </div>
       </section>
 

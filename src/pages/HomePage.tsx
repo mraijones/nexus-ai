@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import { Star, Clock } from 'lucide-react';
 import { tier4Roles, roles } from '@/data/employees';
+import AgentTerminal from '@/components/AgentTerminal';
 
 
 export function HomePage() {
@@ -91,6 +92,15 @@ export function HomePage() {
             </Card>
           ))}
         </div>
+      </div>
+
+      {/* Agent Terminal Showcase */}
+      <div className="w-full max-w-5xl mx-auto mb-12">
+        <AgentTerminal
+          agentName="AURORA-7"
+          missionContext="Institutional growth acceleration"
+          workType="STRATEGIC COMMS"
+        />
       </div>
 
       {/* Coming Soon Banner */}
