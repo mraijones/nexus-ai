@@ -5,6 +5,11 @@
 [functions]
   directory = "netlify/functions"
 
+# Environment variables for build (Note: VITE_ vars are bundled in frontend)
+# Set these in Netlify dashboard under Site Settings > Environment Variables
+[build.environment]
+  NODE_VERSION = "20"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
